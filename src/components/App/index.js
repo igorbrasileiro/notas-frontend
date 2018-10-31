@@ -1,7 +1,7 @@
 import React from 'react';
 import { injectGlobal } from 'styled-components';
 import { MuiThemeProvider } from '@material-ui/core/styles';
-import theme from '../../utils/theme';
+import theme from '../utils/theme';
 import Route from './Routes';
 
 injectGlobal([
