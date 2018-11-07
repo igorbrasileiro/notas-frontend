@@ -15,6 +15,8 @@ import {
   FormControl,
   FormHelperText,
   CircularProgress,
+  Select,
+  MenuItem,
 } from '@material-ui/core';
 
 const DEFAULT_ANIMATION_TIMING = 700;
@@ -147,6 +149,21 @@ const Signup = ({
             </Zoom>
           )}
       </FormControl>
+      <FormControl required className={classes.formControl}>
+        <InputLabel htmlFor="type-required">Tipo</InputLabel>
+        <Select
+          name="role"
+          value={values.role}
+          onChange={handleChange}
+          inputProps={{
+            id: 'type-required',
+          }}
+        >
+          <MenuItem value={''}>Selecione seu tipo</MenuItem>
+          <MenuItem value={'student'}>Aluno</MenuItem>
+          <MenuItem value={'teacher'}>Professor</MenuItem>
+        </Select>
+      </FormControl>
       <div className={classes.signupButtonWrapper}>
         <FadeInButton
           className={classes.signupSubmitButton}
@@ -176,6 +193,7 @@ Signup.propTypes = {
     name: PropTypes.string,
     password: PropTypes.string,
     requestError: PropTypes.string,
+    role: PropTypes.string,
   }).isRequired,
   handleChange: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
@@ -185,11 +203,13 @@ Signup.propTypes = {
     email: PropTypes.bool,
     name: PropTypes.bool,
     password: PropTypes.bool,
+    role: PropTypes.bool,
   }).isRequired,
   values: PropTypes.shape({
     email: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     password: PropTypes.string.isRequired,
+    role: PropTypes.string.isRequired,
   }).isRequired,
 };
 
@@ -200,6 +220,7 @@ export default withRouter(
         name: '',
         email: '',
         password: '',
+        role: '',
       };
     },
     validationSchema: () =>
@@ -218,21 +239,21 @@ export default withRouter(
           .min(6, 'A senha deve ter pelo menos 6 caracteres.')
           .max(30, 'Senha não pode ter mais que 30 caracteres.')
           .required('Senha obrigatória.'),
+        role: Yup.string()
+          .oneOf(['student', 'teacher'])
+          .required('Tipo obrigatório.'),
       }),
     handleSubmit(values, { setSubmitting, props, resetForm }) {
-      const newUser = {
-        ...values,
-        role: 'student',
-      };
-      post('user', newUser)
+      post('user', values)
         .then(() => {
           setSubmitting(false);
           resetForm({
             name: '',
             email: '',
             password: '',
+            role: '',
           });
-          post('auth', { email: newUser.email, password: newUser.password })
+          post('auth', { email: values.email, password: values.password })
             .then(res => {
               localStorage.setItem('token', 'Bearer '.concat(res.data.token));
               props.history.push('/');

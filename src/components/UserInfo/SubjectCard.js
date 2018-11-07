@@ -74,7 +74,7 @@ class SubjectCard extends Component {
     super(props);
 
     this.state = {
-      editing: false,
+      // editing: false,
       expanded: false,
     };
 
@@ -87,7 +87,7 @@ class SubjectCard extends Component {
 
   render() {
     const { classes, subject } = this.props;
-    const { editing, expanded } = this.state;
+    const { expanded } = this.state;
 
     return (
       <Card className={classes.root}>
