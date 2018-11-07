@@ -220,7 +220,7 @@ export default withStyles(styles)(
             post('auth', values)
               .then(res => {
                 setSubmitting(false);
-                localStorage.setItem('token', 'Bearer '.concat(res.data.token));
+                localStorage.setItem('token', res.data.token);
                 resetForm({
                   email: '',
                   password: '',
