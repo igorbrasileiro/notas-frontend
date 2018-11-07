@@ -38,7 +38,6 @@ class ApplicationBar extends Component {
   }
 
   handleOpenUserMenu = event => {
-    console.log('entrei');
     this.setState({ anchorEl: event.currentTarget });
   };
 

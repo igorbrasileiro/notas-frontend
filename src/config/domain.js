@@ -1,5 +1,5 @@
 const domain = {
-  development: 'localhost:8080/api/user/',
+  development: 'http://localhost:8080/api/',
 };
 
 export default domain;
