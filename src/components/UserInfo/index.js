@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 const styles = () => ({
   root: {
-    maxWidth: '70%',
+    width: '60%',
   },
   child: {
     width: '100%',
@@ -13,9 +13,16 @@ const styles = () => ({
   },
 });
 
+const mock = [
+  { name: 'Mocked Name', date: '10/10/2018', id: '1' },
+  { name: 'Mocked Name', date: '10/10/2018', id: '2' },
+];
+
 const UserInfo = ({ classes }) => (
   <div className={classes.root}>
-    <SubjectCard subject={{ name: 'Mocked Name', date: '10/10/2018' }} />
+    {mock.map(subject => (
+      <SubjectCard subject={subject} key={subject.id} />
+    ))}
   </div>
 );
 
