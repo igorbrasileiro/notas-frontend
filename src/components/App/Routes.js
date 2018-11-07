@@ -10,7 +10,7 @@ const AsyncLandingPage = Loadable({
 });
 
 const AsyncHome = Loadable({
-  loader: () => import('../UserInfo/SubjectTable'),
+  loader: () => import('../Home'),
   loading: LoadingPage,
 });
 

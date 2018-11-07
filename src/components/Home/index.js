@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import ApplicationBar from './ApplicationBar';
 import { withStyles } from '@material-ui/core';
 
 const styles = () => ({
@@ -15,7 +16,7 @@ const styles = () => ({
 
 const Home = ({ classes }) => (
   <div className={classes.wrapper}>
-    {/* TODO APPBAR */}
+    <ApplicationBar />
     {/* TODO HOME ROUTER */}
   </div>
 );
