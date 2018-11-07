@@ -220,7 +220,7 @@ export default withStyles(styles)(
             post('auth', values)
               .then(res => {
                 setSubmitting(false);
-                localStorage.setItem('token', res.data.token);
+                localStorage.setItem('token', 'Bearer '.concat(res.data.token));
                 resetForm({
                   email: '',
                   password: '',
@@ -228,7 +228,7 @@ export default withStyles(styles)(
                 props.onClose();
                 props.history.push('/');
               })
-              .catch();
+              .catch(setSubmitting(false));
           },
           enableReinitialize: true,
         })(Signin),

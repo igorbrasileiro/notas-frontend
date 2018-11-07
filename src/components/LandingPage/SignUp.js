@@ -234,7 +234,7 @@ export default withRouter(
           });
           post('auth', { email: newUser.email, password: newUser.password })
             .then(res => {
-              localStorage.setItem('token', res.data.token);
+              localStorage.setItem('token', 'Bearer '.concat(res.data.token));
               props.history.push('/');
             })
             .catch();
