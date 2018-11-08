@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
-import React, { Component, Fragment } from 'react';
+import { clearStore } from '../../actions';
+import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import React, { Component, Fragment } from 'react';
 import { Menu, MenuItem, withStyles } from '@material-ui/core';
 
 const styles = {
@@ -18,9 +20,11 @@ class UserMenu extends Component {
   }
 
   handleLogout() {
+    const { resetStore, onClose } = this.props;
     localStorage.removeItem('token');
+    resetStore();
+    onClose();
     this.goToRoute('/landing');
-    // clean store
   }
 
   goToRoute(path = '/') {
@@ -62,6 +66,16 @@ UserMenu.propTypes = {
   }).isRequired,
   menuId: PropTypes.string.isRequired,
   onClose: PropTypes.func.isRequired,
+  resetStore: PropTypes.func.isRequired,
 };
 
-export default withStyles(styles)(withRouter(UserMenu));
+function mapDispatchToProps(dispatch) {
+  return {
+    resetStore: () => clearStore(dispatch),
+  };
+}
+
+export default connect(
+  null,
+  mapDispatchToProps,
+)(withStyles(styles)(withRouter(UserMenu)));
