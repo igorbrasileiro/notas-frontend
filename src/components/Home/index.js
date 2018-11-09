@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import React, { Component } from 'react';
 import ApplicationBar from './ApplicationBar';
 import { withStyles } from '@material-ui/core';
-import { fetchLoggedUser } from '../../actions/user';
+import { fetchLoggedUser, fetchStudentSubjects } from '../../actions/user';
 
 const MainContainer = styled.main`
   align-items: center;
@@ -29,9 +29,9 @@ const styles = () => ({
 
 class Home extends Component {
   componentDidMount() {
-    const { getLoggedUser } = this.props;
-    console.log('cDM');
+    const { getLoggedUser, getStudentSubject } = this.props;
     getLoggedUser();
+    getStudentSubject();
   }
 
   render() {
@@ -52,11 +52,13 @@ class Home extends Component {
 Home.propTypes = {
   classes: PropTypes.object.isRequired,
   getLoggedUser: PropTypes.func.isRequired,
+  getStudentSubject: PropTypes.func.isRequired,
 };
 
 function mapDispatchToProps(dispatch) {
   return {
     getLoggedUser: () => dispatch(fetchLoggedUser()),
+    getStudentSubject: () => dispatch(fetchStudentSubjects()),
   };
 }
 
