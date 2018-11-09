@@ -13,7 +13,7 @@ const axiosConfig = (token = null, headers = {}) =>
     baseURL: endpoint,
     headers: {
       ...deafaultHeaders,
-      // ...headers,
+      ...headers,
       ...(token !== null ? { Authorization: `Bearer ${token}` } : {}),
     },
   });

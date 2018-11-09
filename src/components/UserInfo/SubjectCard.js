@@ -11,6 +11,7 @@ import {
   CardHeader,
   withStyles,
   CardContent,
+  TextField,
 } from '@material-ui/core';
 
 const styles = theme => ({
@@ -38,16 +39,48 @@ const styles = theme => ({
   expandOpen: {
     transform: 'rotate(180deg)',
   },
+  row: {
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
 });
 
-const SubjectContent = ({ expanded }) => (
+const SubjectContent = ({ classes, expanded, subject }) => (
   <Collapse in={expanded} timeout="auto" unmountOnExit>
-    <CardContent> UHYDASDHUSASUDHADSAD </CardContent>
+    <CardContent>
+      <div className={classes.row}>
+        <TextField
+          label="Sua identificação"
+          value={subject.studentIdentification}
+          margin="normal"
+          variant="outlined"
+          disabled
+        />
+        <TextField
+          label="Coluna de Identificação"
+          value={subject.studentIdentificationColumn}
+          margin="normal"
+          variant="outlined"
+          disabled
+        />
+      </div>
+      <div className={classes.row}>
+        <TextField
+          label="Colunas de notas"
+          value={subject.gradeColumns}
+          margin="normal"
+          variant="outlined"
+          disabled
+        />
+      </div>
+    </CardContent>
   </Collapse>
 );
 
 SubjectContent.propTypes = {
+  classes: PropTypes.object.isRequired,
   expanded: PropTypes.bool.isRequired,
+  subject: PropTypes.object.isRequired,
 };
 
 const ExpandButtonCard = ({ classes, onClick, expanded }) => (
@@ -92,9 +125,9 @@ class SubjectCard extends Component {
     return (
       <Card className={classes.root}>
         <CardHeader
-          avatar={<Avatar className={classes.avatar}>{subject.name.slice(0, 1)}</Avatar>}
-          title={subject.name}
-          subheader={subject.date}
+          avatar={<Avatar className={classes.avatar}>{subject.subject.name.slice(0, 1)}</Avatar>}
+          title={subject.subject.name}
+          subheader={subject.subject.createdAt.slice(0, 10)}
           action={
             <ExpandButtonCard
               expanded={expanded}
@@ -103,7 +136,7 @@ class SubjectCard extends Component {
             />
           }
         />
-        <SubjectContent expanded={expanded} />
+        <SubjectContent classes={classes} expanded={expanded} subject={subject} />
       </Card>
     );
   }
@@ -112,8 +145,15 @@ class SubjectCard extends Component {
 SubjectCard.propTypes = {
   classes: PropTypes.object.isRequired,
   subject: PropTypes.shape({
-    date: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
+    _id: PropTypes.string.isRequired,
+    gradeColumns: PropTypes.string.isRequired,
+    studentIdentification: PropTypes.string.isRequired,
+    studentIdentificationColumn: PropTypes.string.isRequired,
+    subject: PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+      createdAt: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+    }).isRequired,
   }).isRequired,
 };
 
