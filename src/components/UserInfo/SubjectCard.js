@@ -41,7 +41,13 @@ const styles = theme => ({
   },
   row: {
     display: 'flex',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
+  },
+  grade: {
+    width: '100%',
+    '&:not(:last-child)': {
+      marginRight: theme.spacing.unit,
+    },
   },
 });
 
@@ -54,14 +60,14 @@ const SubjectContent = ({ classes, expanded, subject }) => (
           value={subject.studentIdentification}
           margin="normal"
           variant="outlined"
-          disabled
+          className={classes.grade}
         />
         <TextField
           label="Coluna de Identificação"
           value={subject.studentIdentificationColumn}
           margin="normal"
           variant="outlined"
-          disabled
+          className={classes.grade}
         />
       </div>
       <div className={classes.row}>
@@ -70,8 +76,22 @@ const SubjectContent = ({ classes, expanded, subject }) => (
           value={subject.gradeColumns}
           margin="normal"
           variant="outlined"
-          disabled
+          fullWidth
         />
+      </div>
+      <div className={classes.row}>
+        {subject.grades &&
+          subject.grades.map(grade => (
+            <TextField
+              key={grade}
+              label="Nota"
+              value={grade}
+              margin="normal"
+              variant="outlined"
+              className={classes.grade}
+              fullWidth
+            />
+          ))}
       </div>
     </CardContent>
   </Collapse>
@@ -147,6 +167,7 @@ SubjectCard.propTypes = {
   subject: PropTypes.shape({
     _id: PropTypes.string.isRequired,
     gradeColumns: PropTypes.string.isRequired,
+    grades: PropTypes.array,
     studentIdentification: PropTypes.string.isRequired,
     studentIdentificationColumn: PropTypes.string.isRequired,
     subject: PropTypes.shape({
