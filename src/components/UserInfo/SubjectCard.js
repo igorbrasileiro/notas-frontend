@@ -19,10 +19,6 @@ const styles = theme => ({
     width: '100%',
     marginTop: theme.spacing.unit * 2,
   },
-  actions: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-  },
   avatar: {
     backgroundColor: red[500],
   },
@@ -42,6 +38,12 @@ const styles = theme => ({
   row: {
     display: 'flex',
     justifyContent: 'flex-start',
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column',
+    },
+    [theme.breakpoints.up('sm')]: {
+      flexDirection: 'row',
+    },
   },
   grade: {
     width: '100%',

@@ -3,9 +3,14 @@ import SubjectList from './SubjectList';
 import { withStyles } from '@material-ui/core';
 import PropTypes from 'prop-types';
 
-const styles = () => ({
+const styles = theme => ({
   root: {
-    width: '60%',
+    [theme.breakpoints.up('sm')]: {
+      width: '60%',
+    },
+    [theme.breakpoints.down('sm')]: {
+      width: '90%',
+    },
   },
   child: {
     width: '100%',
