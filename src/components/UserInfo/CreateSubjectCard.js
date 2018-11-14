@@ -21,6 +21,18 @@ const style = theme => ({
   root: {
     marginTop: theme.spacing.unit * 2,
   },
+  addButtonContainer: {
+    display: 'flex',
+    flex: '1 1 100%',
+    [theme.breakpoints.up('sm')]: {
+      flexDirection: 'row',
+      justifyContent: 'flex-start',
+    },
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column',
+      justifyContent: 'center',
+    },
+  },
   addButton: {
     marginRight: theme.spacing.unit * 2,
     marginTop: theme.spacing.unit,
@@ -88,17 +100,22 @@ class CreateSubjectCard extends Component {
       <Card className={classes.root}>
         <CardHeader
           title="Adicione Nova Disciplina"
+          classes={{
+            action: classes.addButtonContainer,
+          }}
           action={
             !expanded && (
-              <Button
-                className={classes.addButton}
-                variant="contained"
-                color="primary"
-                disabled={expanded}
-                onClick={this.handleExpandCard}
-              >
-                Adicionar
-              </Button>
+              <div className={classes.addButtonContainer}>
+                <Button
+                  className={classes.addButton}
+                  variant="contained"
+                  color="primary"
+                  disabled={expanded}
+                  onClick={this.handleExpandCard}
+                >
+                  Adicionar
+                </Button>
+              </div>
             )
           }
         />

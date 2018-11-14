@@ -23,6 +23,7 @@ const styles = theme => ({
     backgroundColor: red[500],
   },
   expand: {
+    marginTop: theme.spacing.unit,
     transform: 'rotate(0deg)',
     transition: theme.transitions.create('transform', {
       duration: theme.transitions.duration.shortest,
