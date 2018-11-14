@@ -1,7 +1,8 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import SubjectList from './SubjectList';
 import { withStyles } from '@material-ui/core';
-import PropTypes from 'prop-types';
+import CreateSubjectCard from './CreateSubjectCard';
 
 const styles = theme => ({
   root: {
@@ -20,6 +21,7 @@ const styles = theme => ({
 
 const UserInfo = ({ classes }) => (
   <div className={classes.root}>
+    <CreateSubjectCard />
     <SubjectList />
   </div>
 );
