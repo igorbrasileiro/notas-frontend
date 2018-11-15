@@ -1,5 +1,5 @@
 import { SAVE_USER, SET_LOGGED_USER, SAVE_SUBJECT } from './actionTypes';
-import { get } from '../utils/HTTPClient';
+import { get, post } from '../utils/HTTPClient';
 
 export const fetchLoggedUser = () => dispatch =>
   get('user', localStorage.getItem('token')).then(res => {
@@ -24,6 +24,17 @@ export const fetchStudentSubjects = () => dispatch =>
         });
       });
     }
+  });
+
+export const createStudentSubject = input => dispatch =>
+  post('subject/student', input, null, localStorage.getItem('token')).then(res => {
+    if (res.data) {
+      dispatch({
+        type: SAVE_SUBJECT,
+        subject: res.data,
+      });
+    }
+    return res;
   });
 
 export default {};
