@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import { Form, withFormik } from 'formik';
-import { createStudentSubject } from '../../actions/user';
+import { createStudentSubject } from '../../actions/subject';
 import {
   Card,
   Zoom,
@@ -22,6 +22,10 @@ import {
 const style = theme => ({
   root: {
     marginTop: theme.spacing.unit * 2,
+  },
+  paper: {
+    backgroundColor: 'inherit',
+    boxShadow: 'none',
   },
   addButton: {
     marginRight: theme.spacing.unit * 2,
@@ -95,7 +99,12 @@ class CreateSubjectCard extends Component {
     const { expanded } = this.state;
 
     return (
-      <Card className={classes.root}>
+      <Card
+        className={classes.root}
+        classes={{
+          root: classes.paper,
+        }}
+      >
         <CardHeader
           title="Adicione Nova Disciplina"
           action={

@@ -5,7 +5,8 @@ import styled from 'styled-components';
 import React, { Component } from 'react';
 import ApplicationBar from './ApplicationBar';
 import { withStyles } from '@material-ui/core';
-import { fetchLoggedUser, fetchStudentSubjects } from '../../actions/user';
+import { fetchLoggedUser } from '../../actions/user';
+import { fetchStudentSubjects } from '../../actions/subject';
 
 const MainContainer = styled.main`
   align-items: center;
@@ -16,7 +17,7 @@ const MainContainer = styled.main`
   width: 100%;
 `;
 
-const styles = () => ({
+const styles = {
   wrapper: {
     alignItens: 'center',
     backgroundColor: 'inherit',
@@ -25,7 +26,7 @@ const styles = () => ({
     flexDirection: 'column',
     width: '100%',
   },
-});
+};
 
 class Home extends Component {
   componentDidMount() {
