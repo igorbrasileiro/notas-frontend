@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import red from '@material-ui/core/colors/red';
-import { deleteStudentSubject } from '../../actions/subject';
+import { deleteStudentSubject } from '../../../actions/subject';
 import { ExpandMore, DeleteForever } from '@material-ui/icons';
 import {
   Card,

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import { Form, withFormik } from 'formik';
-import { createStudentSubject } from '../../actions/subject';
+import { createStudentSubject } from '../../../actions/subject';
 import {
   Card,
   Zoom,

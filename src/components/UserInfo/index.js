@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import SubjectList from './SubjectList';
+import { connect } from 'react-redux';
+import TeacherCards from './TeacherCards';
+import StudentCards from './StudentCards';
 import { withStyles } from '@material-ui/core';
-import CreateSubjectCard from './CreateSubjectCard';
 
 const styles = theme => ({
   root: {
@@ -19,15 +20,19 @@ const styles = theme => ({
   },
 });
 
-const UserInfo = ({ classes }) => (
-  <div className={classes.root}>
-    <CreateSubjectCard />
-    <SubjectList />
-  </div>
+const UserInfo = ({ classes, role }) => (
+  <div className={classes.root}>{role === 'student' ? <StudentCards /> : <TeacherCards />}</div>
 );
 
 UserInfo.propTypes = {
   classes: PropTypes.object.isRequired,
+  role: PropTypes.string.isRequired,
 };
 
-export default withStyles(styles)(UserInfo);
+function mapStateToProps({ user }) {
+  return {
+    role: user.byId[user.loggedUserId].role,
+  };
+}
+
+export default connect(mapStateToProps)(withStyles(styles)(UserInfo));

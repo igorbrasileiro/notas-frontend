@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import React, { Component } from 'react';
 import ApplicationBar from './ApplicationBar';
 import { withStyles } from '@material-ui/core';
+import { NO_LOGGED_USER } from '../../reducers/user';
 import { fetchLoggedUser } from '../../actions/user';
 import { fetchStudentSubjects } from '../../actions/subject';
 
@@ -36,15 +37,12 @@ class Home extends Component {
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, role } = this.props;
 
     return (
       <div className={classes.wrapper}>
         <ApplicationBar />
-        {/* TODO HOME ROUTER */}
-        <MainContainer>
-          <UserInfo />
-        </MainContainer>
+        <MainContainer>{role && <UserInfo />}</MainContainer>
       </div>
     );
   }
@@ -54,7 +52,15 @@ Home.propTypes = {
   classes: PropTypes.object.isRequired,
   getLoggedUser: PropTypes.func.isRequired,
   getStudentSubject: PropTypes.func.isRequired,
+  role: PropTypes.string.isRequired,
 };
+
+function mapStateToProps({ user }) {
+  const role = user.loggedUserId !== NO_LOGGED_USER ? user.byId[user.loggedUserId].role : '';
+  return {
+    role,
+  };
+}
 
 function mapDispatchToProps(dispatch) {
   return {
@@ -64,6 +70,6 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps,
 )(withStyles(styles)(Home));
