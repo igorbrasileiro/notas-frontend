@@ -35,13 +35,15 @@ export const deleteStudentSubject = id => dispatch =>
   });
 
 export const createTeacherSubject = input => dispatch =>
-  post('subject', input, null, localStorage.getItem('token')).then(({ data }) => {
-    if (data) {
+  post('subject', input, null, localStorage.getItem('token')).then(res => {
+    if (res.data) {
       dispatch({
         type: SAVE_SUBJECT,
-        subject: data,
+        subject: res.data,
       });
     }
+
+    return res;
   });
 
 export default {};

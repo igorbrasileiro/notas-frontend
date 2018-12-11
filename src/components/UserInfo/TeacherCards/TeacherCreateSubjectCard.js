@@ -213,15 +213,20 @@ export default connect(
         }),
       }),
     handleSubmit(values, { props, resetForm, setSubmitting }) {
-      props.createSubject(values).then(res => {
-        if (res.data) {
+      props
+        .createSubject(values)
+        .then(res => {
+          if (res.data) {
+            setSubmitting(false);
+            resetForm({
+              name: '',
+              spreadsheetId: '',
+            });
+          }
+        })
+        .catch(() => {
           setSubmitting(false);
-          resetForm({
-            name: '',
-            spreadsheetId: '',
-          });
-        }
-      });
+        });
     },
   })(withStyles(style)(TeacherCreateSubjectCard)),
 );
