@@ -49,7 +49,7 @@ const style = theme => ({
   },
 });
 
-const fields = ['subjectName', 'spreadsheetId'];
+const fields = ['name', 'spreadsheetId'];
 
 const convertToLabel = field => {
   switch (field) {
@@ -171,19 +171,19 @@ class TeacherCreateSubjectCard extends PureComponent {
 TeacherCreateSubjectCard.propTypes = {
   classes: PropTypes.object.isRequired,
   errors: PropTypes.shape({
+    name: PropTypes.string,
     spreadsheetId: PropTypes.string,
-    subjectName: PropTypes.string,
   }).isRequired,
   handleChange: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   isSubmitting: PropTypes.bool.isRequired,
   touched: PropTypes.shape({
+    name: PropTypes.bool,
     spreadsheetId: PropTypes.bool,
-    subjectName: PropTypes.bool,
   }).isRequired,
   values: PropTypes.shape({
+    name: PropTypes.string.isRequired,
     spreadsheetId: PropTypes.string.isRequired,
-    subjectName: PropTypes.string.isRequired,
   }).isRequired,
 };
 
@@ -200,25 +200,25 @@ export default connect(
   withFormik({
     mapPropsToValues() {
       return {
+        name: '',
         spreadsheetId: '',
-        subjectName: '',
       };
     },
     validationSchema: () =>
       Yup.object().shape({
+        name: Yup.string().required('Nome da Disciplina não pode ser vazio!'),
         spreadsheetId: Yup.string().matches(/(\w|\d|[-|_]?)+/, {
           message: 'Padrão da Spreadsheet ID está errado!',
           excludeEmptyString: true,
         }),
-        subjectName: Yup.string().required('Nome da Disciplina não pode ser vazio!'),
       }),
     handleSubmit(values, { props, resetForm, setSubmitting }) {
       props.createSubject(values).then(res => {
         if (res.data) {
           setSubmitting(false);
           resetForm({
+            name: '',
             spreadsheetId: '',
-            subjectName: '',
           });
         }
       });
