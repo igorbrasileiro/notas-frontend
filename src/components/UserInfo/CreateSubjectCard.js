@@ -228,7 +228,7 @@ export default connect(
           excludeEmptyString: true,
         }),
         subject: Yup.string().matches(/(\w|\d|[-|_]?)+/, {
-          message: 'Padrão da Coluna de Sua Identificação está errado!',
+          message: 'Padrão da Identificação da disciplina está errado!',
           excludeEmptyString: true,
         }),
       }),

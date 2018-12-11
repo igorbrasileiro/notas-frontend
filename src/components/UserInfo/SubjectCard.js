@@ -202,4 +202,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(null, mapDispatchToProps)(withStyles(styles)(SubjectCard));
+export default connect(
+  null,
+  mapDispatchToProps,
+)(withStyles(styles)(SubjectCard));
