@@ -51,4 +51,14 @@ export const createTeacherSubject = input => dispatch =>
     return res;
   });
 
+export const deleteTeacherSubject = id => dispatch =>
+  del('subject/'.concat(id), localStorage.getItem('token')).then(({ data }) => {
+    if (data) {
+      dispatch({
+        type: REMOVE_SUBJECT,
+        id,
+      });
+    }
+  });
+
 export default {};

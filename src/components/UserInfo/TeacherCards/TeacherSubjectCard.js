@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import React from 'react';
 import red from '@material-ui/core/colors/red';
 import { DeleteForever } from '@material-ui/icons';
+import { deleteTeacherSubject } from '../../../actions/subject';
 import { Card, Avatar, IconButton, CardHeader, withStyles } from '@material-ui/core';
 
 const styles = theme => ({
@@ -61,7 +62,7 @@ TeacherSubjectCard.propTypes = {
 
 function mapDispatchToProps(dispatch) {
   return {
-    removeTeacherSubject: id => { console.log(id); },
+    removeTeacherSubject: id => dispatch(deleteTeacherSubject(id)),
   };
 }
 
