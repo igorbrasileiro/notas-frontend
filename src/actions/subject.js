@@ -1,16 +1,21 @@
 import { SAVE_SUBJECT, REMOVE_SUBJECT } from './actionTypes';
 import { get, post, del } from '../utils/HTTPClient';
 
-export const fetchStudentSubjects = () => dispatch =>
-  get('subject/student', localStorage.getItem('token')).then(res => {
+const saveSubjects = (subjects, dispatch) => {
+  subjects.forEach(subject => {
+    dispatch({
+      type: SAVE_SUBJECT,
+      subject,
+    });
+  });
+};
+export const fetchUserSubjects = () => dispatch =>
+  get('subject/', localStorage.getItem('token')).then(res => {
     if (res.data && res.data instanceof Array) {
-      res.data.forEach(subject => {
-        dispatch({
-          type: SAVE_SUBJECT,
-          subject,
-        });
-      });
+      saveSubjects(res.data, dispatch);
     }
+
+    return res;
   });
 
 export const createStudentSubject = input => dispatch =>

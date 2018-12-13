@@ -7,7 +7,7 @@ import ApplicationBar from './ApplicationBar';
 import { withStyles } from '@material-ui/core';
 import { NO_LOGGED_USER } from '../../reducers/user';
 import { fetchLoggedUser } from '../../actions/user';
-import { fetchStudentSubjects } from '../../actions/subject';
+import { fetchUserSubjects } from '../../actions/subject';
 
 const MainContainer = styled.main`
   align-items: center;
@@ -31,9 +31,9 @@ const styles = {
 
 class Home extends Component {
   componentDidMount() {
-    const { getLoggedUser, getStudentSubject } = this.props;
+    const { getLoggedUser, getUserSubjects } = this.props;
     getLoggedUser();
-    getStudentSubject();
+    getUserSubjects();
   }
 
   render() {
@@ -51,7 +51,7 @@ class Home extends Component {
 Home.propTypes = {
   classes: PropTypes.object.isRequired,
   getLoggedUser: PropTypes.func.isRequired,
-  getStudentSubject: PropTypes.func.isRequired,
+  getUserSubjects: PropTypes.func.isRequired,
   role: PropTypes.string.isRequired,
 };
 
@@ -65,7 +65,7 @@ function mapStateToProps({ user }) {
 function mapDispatchToProps(dispatch) {
   return {
     getLoggedUser: () => dispatch(fetchLoggedUser()),
-    getStudentSubject: () => dispatch(fetchStudentSubjects()),
+    getUserSubjects: () => dispatch(fetchUserSubjects()), // CHANGE TO USER
   };
 }
 
