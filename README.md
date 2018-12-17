@@ -9,7 +9,5 @@ Consiste em API frontend para um sistema que permite estudantes capturar notas d
 1. `yarn` para baixar as dependências
 2. `yarn start` para iniciar a aplicação
 
-- Caso deseje utilizar o mongodb em memória, configurar o arquivo `app.ts`
-
 ### Tecnologias utilizadas
 - ReactJS + MaterialUI
