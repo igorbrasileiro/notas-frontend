@@ -1,8 +1,10 @@
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import red from '@material-ui/core/colors/red';
-import { ExpandMore } from '@material-ui/icons';
+import { deleteStudentSubject } from '../../../actions/subject';
+import { ExpandMore, DeleteForever } from '@material-ui/icons';
 import {
   Card,
   Avatar,
@@ -12,6 +14,7 @@ import {
   withStyles,
   CardContent,
   TextField,
+  CardActions,
 } from '@material-ui/core';
 
 const styles = theme => ({
@@ -54,7 +57,7 @@ const styles = theme => ({
   },
 });
 
-const SubjectContent = ({ classes, expanded, subject }) => (
+const SubjectContent = ({ classes, expanded, onHandleRemove, subject }) => (
   <Collapse in={expanded} timeout="auto" unmountOnExit>
     <CardContent>
       <div className={classes.row}>
@@ -97,12 +100,18 @@ const SubjectContent = ({ classes, expanded, subject }) => (
           ))}
       </div>
     </CardContent>
+    <CardActions>
+      <IconButton onClick={() => onHandleRemove(subject._id)}>
+        <DeleteForever />
+      </IconButton>
+    </CardActions>
   </Collapse>
 );
 
 SubjectContent.propTypes = {
   classes: PropTypes.object.isRequired,
   expanded: PropTypes.bool.isRequired,
+  onHandleRemove: PropTypes.func.isRequired,
   subject: PropTypes.object.isRequired,
 };
 
@@ -142,7 +151,7 @@ class SubjectCard extends Component {
   }
 
   render() {
-    const { classes, subject } = this.props;
+    const { classes, subject, removeStudentSubject } = this.props;
     const { expanded } = this.state;
 
     return (
@@ -159,7 +168,12 @@ class SubjectCard extends Component {
             />
           }
         />
-        <SubjectContent classes={classes} expanded={expanded} subject={subject} />
+        <SubjectContent
+          classes={classes}
+          expanded={expanded}
+          subject={subject}
+          onHandleRemove={removeStudentSubject}
+        />
       </Card>
     );
   }
@@ -167,6 +181,7 @@ class SubjectCard extends Component {
 
 SubjectCard.propTypes = {
   classes: PropTypes.object.isRequired,
+  removeStudentSubject: PropTypes.func.isRequired,
   subject: PropTypes.shape({
     _id: PropTypes.string.isRequired,
     gradeColumns: PropTypes.string.isRequired,
@@ -181,4 +196,13 @@ SubjectCard.propTypes = {
   }).isRequired,
 };
 
-export default withStyles(styles)(SubjectCard);
+function mapDispatchToProps(dispatch) {
+  return {
+    removeStudentSubject: id => dispatch(deleteStudentSubject(id)),
+  };
+}
+
+export default connect(
+  null,
+  mapDispatchToProps,
+)(withStyles(styles)(SubjectCard));

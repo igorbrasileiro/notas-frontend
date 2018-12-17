@@ -5,7 +5,9 @@ import styled from 'styled-components';
 import React, { Component } from 'react';
 import ApplicationBar from './ApplicationBar';
 import { withStyles } from '@material-ui/core';
-import { fetchLoggedUser, fetchStudentSubjects } from '../../actions/user';
+import { NO_LOGGED_USER } from '../../reducers/user';
+import { fetchLoggedUser } from '../../actions/user';
+import { fetchUserSubjects } from '../../actions/subject';
 
 const MainContainer = styled.main`
   align-items: center;
@@ -16,7 +18,7 @@ const MainContainer = styled.main`
   width: 100%;
 `;
 
-const styles = () => ({
+const styles = {
   wrapper: {
     alignItens: 'center',
     backgroundColor: 'inherit',
@@ -25,25 +27,22 @@ const styles = () => ({
     flexDirection: 'column',
     width: '100%',
   },
-});
+};
 
 class Home extends Component {
   componentDidMount() {
-    const { getLoggedUser, getStudentSubject } = this.props;
+    const { getLoggedUser, getUserSubjects } = this.props;
     getLoggedUser();
-    getStudentSubject();
+    getUserSubjects();
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, role } = this.props;
 
     return (
       <div className={classes.wrapper}>
         <ApplicationBar />
-        {/* TODO HOME ROUTER */}
-        <MainContainer>
-          <UserInfo />
-        </MainContainer>
+        <MainContainer>{role && <UserInfo />}</MainContainer>
       </div>
     );
   }
@@ -52,17 +51,25 @@ class Home extends Component {
 Home.propTypes = {
   classes: PropTypes.object.isRequired,
   getLoggedUser: PropTypes.func.isRequired,
-  getStudentSubject: PropTypes.func.isRequired,
+  getUserSubjects: PropTypes.func.isRequired,
+  role: PropTypes.string.isRequired,
 };
+
+function mapStateToProps({ user }) {
+  const role = user.loggedUserId !== NO_LOGGED_USER ? user.byId[user.loggedUserId].role : '';
+  return {
+    role,
+  };
+}
 
 function mapDispatchToProps(dispatch) {
   return {
     getLoggedUser: () => dispatch(fetchLoggedUser()),
-    getStudentSubject: () => dispatch(fetchStudentSubjects()),
+    getUserSubjects: () => dispatch(fetchUserSubjects()), // CHANGE TO USER
   };
 }
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps,
 )(withStyles(styles)(Home));

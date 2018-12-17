@@ -1,27 +1,31 @@
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import React, { Component } from 'react';
 import { Form, withFormik } from 'formik';
-import { createStudentSubject } from '../../actions/user';
+import React, { PureComponent } from 'react';
+import { createTeacherSubject } from '../../../actions/subject';
 import {
   Card,
-  Zoom,
-  Input,
-  Button,
-  Collapse,
   CardHeader,
-  InputLabel,
-  withStyles,
+  Collapse,
   FormControl,
-  CardContent,
-  FormHelperText,
+  InputLabel,
+  Input,
   CardActions,
+  Button,
+  FormHelperText,
+  CardContent,
+  Zoom,
+  withStyles,
 } from '@material-ui/core';
 
 const style = theme => ({
   root: {
     marginTop: theme.spacing.unit * 2,
+  },
+  paper: {
+    backgroundColor: 'inherit',
+    boxShadow: 'none',
   },
   addButton: {
     marginRight: theme.spacing.unit * 2,
@@ -45,24 +49,20 @@ const style = theme => ({
   },
 });
 
-const fields = ['gradeColumns', 'studentIdentification', 'studentIdentificationColumn', 'subject'];
+const fields = ['name', 'spreadsheetId'];
 
 const convertToLabel = field => {
   switch (field) {
-    case 'gradeColumns':
-      return 'Colunas de Notas';
-    case 'studentIdentification':
-      return 'Sua Identificação na Planilha';
-    case 'studentIdentificationColumn':
-      return 'Coluna da Sua Identificação';
-    case 'subject':
-      return 'Identiticação de Planilha Google';
+    case fields[0]:
+      return 'Nome da Disciplina';
+    case fields[1]:
+      return 'Spreadsheet ID';
     default:
       return '';
   }
 };
 
-class CreateSubjectCard extends Component {
+class TeacherCreateSubjectCard extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -95,7 +95,12 @@ class CreateSubjectCard extends Component {
     const { expanded } = this.state;
 
     return (
-      <Card className={classes.root}>
+      <Card
+        className={classes.root}
+        classes={{
+          root: classes.paper,
+        }}
+      >
         <CardHeader
           title="Adicione Nova Disciplina"
           action={
@@ -144,7 +149,7 @@ class CreateSubjectCard extends Component {
               disabled={isSubmitting}
               variant="contained"
               color="secondary"
-              onClick={this.handleUnexpandCard}
+              onClick={this.handleExpandCard}
             >
               Fechar
             </Button>
@@ -163,34 +168,28 @@ class CreateSubjectCard extends Component {
   }
 }
 
-CreateSubjectCard.propTypes = {
+TeacherCreateSubjectCard.propTypes = {
   classes: PropTypes.object.isRequired,
   errors: PropTypes.shape({
-    gradeColumns: PropTypes.string,
-    studentIdentification: PropTypes.string,
-    studentIdentificationColumn: PropTypes.string,
-    subject: PropTypes.string,
+    name: PropTypes.string,
+    spreadsheetId: PropTypes.string,
   }).isRequired,
   handleChange: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   isSubmitting: PropTypes.bool.isRequired,
   touched: PropTypes.shape({
-    gradeColumns: PropTypes.bool,
-    studentIdentification: PropTypes.bool,
-    studentIdentificationColumn: PropTypes.bool,
-    subject: PropTypes.bool,
+    name: PropTypes.bool,
+    spreadsheetId: PropTypes.bool,
   }).isRequired,
   values: PropTypes.shape({
-    gradeColumns: PropTypes.string.isRequired,
-    studentIdentification: PropTypes.string.isRequired,
-    studentIdentificationColumn: PropTypes.string.isRequired,
-    subject: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    spreadsheetId: PropTypes.string.isRequired,
   }).isRequired,
 };
 
 function mapDispatchToProps(dispatch) {
   return {
-    createSubject: input => dispatch(createStudentSubject(input)),
+    createSubject: input => dispatch(createTeacherSubject(input)),
   };
 }
 
@@ -201,40 +200,33 @@ export default connect(
   withFormik({
     mapPropsToValues() {
       return {
-        gradeColumns: '',
-        studentIdentification: '',
-        studentIdentificationColumn: '',
-        subject: '',
+        name: '',
+        spreadsheetId: '',
       };
     },
     validationSchema: () =>
       Yup.object().shape({
-        gradeColumns: Yup.string().matches(/\w+!\w+\d*:\w+\d*/, {
-          message: 'Padrão da(s) Coluna(s) de Nota(s) errado!',
-          excludeEmptyString: true,
-        }),
-        studentIdentification: Yup.string().required('Sua Identificação não pode ser vazio!'),
-        studentIdentificationColumn: Yup.string().matches(/\w+!\w+\d*:\w+\d*/, {
-          message: 'Padrão da Coluna de Sua Identificação está errado!',
-          excludeEmptyString: true,
-        }),
-        subject: Yup.string().matches(/(\w|\d|[-|_]?)+/, {
-          message: 'Padrão da Coluna de Sua Identificação está errado!',
+        name: Yup.string().required('Nome da Disciplina não pode ser vazio!'),
+        spreadsheetId: Yup.string().matches(/(\w|\d|[-|_]?)+/, {
+          message: 'Padrão da Spreadsheet ID está errado!',
           excludeEmptyString: true,
         }),
       }),
     handleSubmit(values, { props, resetForm, setSubmitting }) {
-      props.createSubject(values).then(res => {
-        if (res.data) {
+      props
+        .createSubject(values)
+        .then(res => {
+          if (res.data) {
+            setSubmitting(false);
+            resetForm({
+              name: '',
+              spreadsheetId: '',
+            });
+          }
+        })
+        .catch(() => {
           setSubmitting(false);
-          resetForm({
-            gradeColumns: '',
-            studentIdentification: '',
-            studentIdentificationColumn: '',
-            subject: '',
-          });
-        }
-      });
+        });
     },
-  })(withStyles(style)(CreateSubjectCard)),
+  })(withStyles(style)(TeacherCreateSubjectCard)),
 );
