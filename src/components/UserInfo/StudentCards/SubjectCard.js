@@ -49,6 +49,12 @@ const styles = theme => ({
       flexDirection: 'row',
     },
   },
+  gradesGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(70px, 1fr))',
+    columnGap: theme.spacing.unit,
+    gridAutoRows: '1fr',
+  },
   grade: {
     width: '100%',
     '&:not(:last-child)': {
@@ -56,6 +62,11 @@ const styles = theme => ({
     },
   },
 });
+
+const hash = grade => {
+  const date = new Date();
+  return date.toString().concat(grade + Math.random(100));
+};
 
 const SubjectContent = ({ classes, expanded, onHandleRemove, subject }) => (
   <Collapse in={expanded} timeout="auto" unmountOnExit>
@@ -85,11 +96,11 @@ const SubjectContent = ({ classes, expanded, onHandleRemove, subject }) => (
           fullWidth
         />
       </div>
-      <div className={classes.row}>
+      <div className={classes.gradesGrid}>
         {subject.grades &&
           subject.grades.map(grade => (
             <TextField
-              key={grade}
+              key={hash(grade)}
               label="Nota"
               value={grade}
               margin="normal"
