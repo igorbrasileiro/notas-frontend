@@ -10,4 +10,4 @@ Consiste em API frontend para um sistema que permite estudantes capturar notas d
 2. `yarn start` para iniciar a aplicação
 
 ### Tecnologias utilizadas
-- ReactJS + MaterialUI
+- [ReactJS](https://reactjs.org/) + [MaterialUI](http://material-ui.com/)
