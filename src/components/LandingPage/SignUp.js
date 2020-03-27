@@ -1,7 +1,6 @@
 import React from "react";
 import * as Yup from "yup";
 import PropTypes from "prop-types";
-import styled from "styled-components";
 import { Form, withFormik } from "formik";
 import { withRouter } from "react-router-dom";
 import { withStyles } from "@material-ui/core/styles";
@@ -22,63 +21,70 @@ import { post } from "../../utils/HTTPClient";
 
 const DEFAULT_ANIMATION_TIMING = 700;
 
-const SignupContainer = styled(Paper)`
-  animation: translatedFadein ${DEFAULT_ANIMATION_TIMING}ms 1;
-  border-radius: 5px;
-  padding: 12px;
-  z-index: 10;
-  margin-top: auto;
-  margin-bottom: auto;
-
-  @keyframes translatedFadein {
-    0% {
-      animation-timing-function: ease-in-out;
-      opacity: 0;
-      transform: translateY(100px);
-    }
-
-    50% {
-      opacity: 0.8;
-      transform: translateY(20px);
-    }
-    70% {
-      opacity: 0.9;
-      transform: translateY(10px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @media screen and (min-width: 1920px) {
-    width: 30%;
-  }
-
-  @media screen and (min-width: 1280px) and (max-width: 1919px) {
-    width: 40%;
-  }
-
-  @media screen and (min-width: 960px) and (max-width: 1279px) {
-    width: 50%;
-  }
-
-  @media screen and (min-width: 600px) and (max-width: 959px) {
-    width: 70%;
-  }
-
-  @media screen and (max-width: 599px) {
-    width: 95%;
-  }
-`;
-
-const StyledForm = styled(Form)`
-  display: flex;
-  flex-direction: column;
-  margin-top: 20px;
-`;
-
 const styles = (theme) => ({
+  form: {
+    display: "flex",
+    flexDirection: "column",
+    marginTop: 20,
+  },
+  signupContainer: {
+    animation: `$translatedFadein ${DEFAULT_ANIMATION_TIMING}ms 1`,
+    borderRadius: 5,
+    padding: 12,
+    zIndex: 10,
+    marginTop: "auto",
+    marginBottom: "auto",
+    "@media screen and (min-width: 1920px)": {
+      signupContainer: {
+        width: "30%",
+      },
+    },
+  },
+  "@media screen and (min-width: 1280px) and (max-width: 1919px)": {
+    signupContainer: {
+      width: "40%",
+    },
+  },
+
+  "@media screen and (min-width: 960px) and (max-width: 1279px)": {
+    signupContainer: {
+      width: "50%",
+    },
+  },
+
+  "@media screen and (min-width: 600px) and (max-width: 959px)": {
+    signupContainer: {
+      width: "70%",
+    },
+  },
+
+  "@media screen and (max-width: 599px)": {
+    signupContainer: {
+      width: "95%",
+    },
+  },
+  "@keyframes translatedFadein": {
+    "0%": {
+      "animation-timing-function": "ease-in-out",
+      opacity: 0,
+      transform: "translateY(100px)",
+    },
+
+    "50%": {
+      opacity: 0.8,
+      transform: "translateY(20px)",
+    },
+
+    "70%": {
+      opacity: 0.9,
+      transform: "translateY(10px)",
+    },
+
+    "100%": {
+      opacity: 1,
+      transform: "translateY(0)",
+    },
+  },
   signupButtonProgress: {
     left: "50%",
     marginLeft: -12,
@@ -88,10 +94,10 @@ const styles = (theme) => ({
     zIndex: 1,
   },
   formControl: {
-    marginBottom: theme.spacing.unit,
+    marginBottom: theme.spacing(),
   },
   signupButtonWrapper: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(),
     position: "relative",
   },
   signupSubmitButton: {
@@ -109,8 +115,8 @@ const Signup = ({
   isSubmitting,
   handleSubmit,
 }) => (
-  <SignupContainer>
-    <StyledForm>
+  <Paper className={classes.signupContainer}>
+    <Form className={classes.form}>
       <FormControl
         className={classes.formControl}
         error={touched.name && errors.name !== undefined}
@@ -196,13 +202,13 @@ const Signup = ({
       </div>
       <FadeInButton
         color="secondary"
-        delay={FadeInButton.defaultProps.delay * 1.3}
+        delay={DEFAULT_ANIMATION_TIMING * 1.3}
         onClick={onHandleSignIn}
       >
         Login
       </FadeInButton>
-    </StyledForm>
-  </SignupContainer>
+    </Form>
+  </Paper>
 );
 
 Signup.propTypes = {

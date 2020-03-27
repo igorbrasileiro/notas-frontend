@@ -1,6 +1,5 @@
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import styled from "styled-components";
 import React, { Component } from "react";
 import { withStyles } from "@material-ui/core";
 
@@ -10,16 +9,15 @@ import { NO_LOGGED_USER } from "../../reducers/user";
 import { fetchLoggedUser } from "../../actions/user";
 import { fetchUserSubjects } from "../../actions/subject";
 
-const MainContainer = styled.main`
-  align-items: center;
-  background-color: inherit;
-  display: flex;
-  flex-direction: column;
-  margin-top: 70px;
-  width: 100%;
-`;
-
 const styles = {
+  main: {
+    alignItens: "center",
+    backgroundColor: "inherit",
+    display: "flex",
+    flexDirection: "column",
+    marginTop: "70px",
+    width: "100%",
+  },
   wrapper: {
     alignItens: "center",
     backgroundColor: "inherit",
@@ -43,7 +41,7 @@ class Home extends Component {
     return (
       <div className={classes.wrapper}>
         <ApplicationBar />
-        <MainContainer>{role && <UserInfo />}</MainContainer>
+        <div className={classes.main}>{role && <UserInfo />}</div>
       </div>
     );
   }
@@ -60,7 +58,7 @@ function mapStateToProps({ user }) {
   const role =
     user.loggedUserId !== NO_LOGGED_USER
       ? user.byId[user.loggedUserId].role
-      : "";
+      : "student";
   return {
     role,
   };

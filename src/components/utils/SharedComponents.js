@@ -1,57 +1,32 @@
 import React from "react";
 import PropTypes from "prop-types";
-import styled from "styled-components";
-import { withStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import { Button, withWidth, Typography, Grow } from "@material-ui/core";
 
-export const FadeInButton = styled(Button)`
-  animation: fadeIn ${({ delay }) => delay * 2}ms;
-  @keyframes fadeIn {
-    0% {
-      opacity: 0;
-    }
-    50% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 1;
-    }
-  }
-`;
+const FadeInButtonStyles = (delay) =>
+  makeStyles({
+    root: {
+      animation: `$fadeIn ${delay * 2}ms`,
+    },
+    "@keyframes fadeIn": {
+      "0%": {
+        opacity: 0,
+      },
+      "50%": {
+        opacity: 0,
+      },
+      "100%": {
+        opacity: 1,
+      },
+    },
+  });
 
-FadeInButton.defaultProps = {
-  delay: 700,
+export const FadeInButton = (props) => {
+  const classes = FadeInButtonStyles(props.delay);
+  return <Button className={classes.root} {...props} />;
 };
-
-FadeInButton.propTypes = {
-  delay: PropTypes.number,
-};
-
-export const ActionsContainer = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  width: 100%;
-`;
 
 export const DefaultDialogTransition = (props) => <Grow in {...props} />;
-
-export const GridContainer = styled.div`
-  display: grid;
-  grid-auto-rows: 1fr;
-  grid-gap: 6px;
-  grid-template-columns: repeat(auto-fill, minmax(225px, 1fr));
-  &:before {
-    content: "";
-    width: 0;
-    padding-bottom: 100%;
-    grid-row: 1 / 1;
-    grid-column: 1 / 1;
-  }
-  & > *:first-child {
-    grid-row: 1 / 1;
-    grid-column: 1 / 1;
-  }
-`;
 
 // -------------------------------------------------------
 const styles = (theme) => ({

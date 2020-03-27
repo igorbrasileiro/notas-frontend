@@ -28,7 +28,6 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
     "serve": "^11.3.0",
-    "styled-components": "^5.0.1",
     "yup": "^0.28.3"
   },
   "husky": {

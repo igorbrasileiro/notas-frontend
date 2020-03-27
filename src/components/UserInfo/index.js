@@ -8,6 +8,7 @@ import StudentCards from "./StudentCards";
 
 const styles = (theme) => ({
   root: {
+    margin: "0 auto",
     [theme.breakpoints.up("sm")]: {
       width: "60%",
     },
@@ -34,7 +35,7 @@ UserInfo.propTypes = {
 
 function mapStateToProps({ user }) {
   return {
-    role: user.byId[user.loggedUserId].role,
+    role: user?.byId[user?.loggedUserId]?.role,
   };
 }
 

@@ -17,7 +17,7 @@ const AsyncHome = Loadable({
 
 const routes = () => (
   <Switch>
-    <Route path="/landing" exact component={AsyncLandingPage} />
+    <Route path="/landing" component={AsyncLandingPage} />
     <AuthRoute component={AsyncHome} />
   </Switch>
 );

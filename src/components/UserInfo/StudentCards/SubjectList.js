@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 
 import SubjectCard from "./SubjectCard";
 
-const SubjectList = ({ subjects }) =>
+const SubjectList = ({ subjects = [] }) =>
   subjects.map((subject) => (
     <SubjectCard key={subject._id} subject={subject} />
   ));

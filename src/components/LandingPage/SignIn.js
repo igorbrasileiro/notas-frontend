@@ -1,7 +1,6 @@
 import React from "react";
 import * as Yup from "yup";
 import PropTypes from "prop-types";
-import styled from "styled-components";
 import { Form, withFormik } from "formik";
 import { withRouter } from "react-router-dom";
 import { capitalize } from "@material-ui/core/utils";
@@ -25,16 +24,15 @@ import {
 
 import { post } from "../../utils/HTTPClient";
 
-const StyledForm = styled(Form)`
-  display: flex;
-  flex-direction: column;
-`;
-
 const Transition = (props) => {
   return <Grow in {...props} />;
 };
 
 const styles = (theme) => ({
+  form: {
+    display: "flex",
+    flexDirection: "column",
+  },
   singinDialogRoot: {
     minWidth: "30vw",
   },
@@ -107,7 +105,7 @@ const Signin = ({
     >
       <DialogTitle>Login</DialogTitle>
       <DialogContent>
-        <StyledForm>
+        <Form className={classes.form}>
           <FormControl
             className={classes.formControl}
             error={touched.email && errors.email !== undefined}
@@ -173,7 +171,7 @@ const Signin = ({
               </FormHelperText>
             </Zoom>
           )}
-        </StyledForm>
+        </Form>
       </DialogContent>
     </Dialog>
   );

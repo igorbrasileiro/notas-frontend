@@ -1,29 +1,21 @@
 import PropTypes from "prop-types";
-import styled from "styled-components";
 import React, { Component } from "react";
+import { withStyles } from "@material-ui/core";
 
 import SignUp from "./SignUp";
 import SignIn from "./SignIn";
-import theme from "../utils/theme";
 
-const LandingContainer = styled.div`
-  align-items: center;
-  display: flex;
-  height: calc(100vh - ${({ unit }) => unit * 2}px);
-  justify-content: center;
-  overflow: hidden;
-  padding: ${({ unit }) => unit}px;
-  position: relative;
-  width: calc(100% - ${({ unit }) => unit * 2}px);
-`;
-
-LandingContainer.propTypes = {
-  unit: PropTypes.number,
-};
-
-LandingContainer.defaultProps = {
-  unit: theme.spacing.unit,
-};
+const styles = (theme) => ({
+  root: {
+    alignItems: "center",
+    display: "flex",
+    height: `calc(100vh - ${theme.spacing(2)}px)`,
+    justifyContent: "center",
+    overflow: "hidden",
+    padding: theme.spacing(1),
+    position: "relative",
+  },
+});
 
 class LandingPage extends Component {
   constructor(props) {
@@ -47,14 +39,19 @@ class LandingPage extends Component {
 
   render() {
     const { openSignIn } = this.state;
+    const { classes } = this.props;
 
     return (
-      <LandingContainer>
+      <div className={classes.root}>
         <SignUp onHandleSignIn={this.handleOpenSignIn} />
         <SignIn open={openSignIn} onClose={this.handleCloseSignIn} />
-      </LandingContainer>
+      </div>
     );
   }
 }
 
-export default LandingPage;
+LandingPage.propTypes = {
+  classes: PropTypes.object,
+};
+
+export default withStyles(styles)(LandingPage);
