@@ -1,11 +1,11 @@
 import React from "react";
-import { injectGlobal } from "styled-components";
+import { createGlobalStyle } from "styled-components";
 import { MuiThemeProvider } from "@material-ui/core/styles";
 
 import theme from "../utils/theme";
 import Route from "./Routes";
 
-injectGlobal([
+createGlobalStyle([
   `
   html, body {
     background-color: ${theme.palette.background.default};
