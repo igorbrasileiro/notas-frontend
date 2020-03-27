@@ -1,11 +1,10 @@
-import React from 'react';
-import * as Yup from 'yup';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import { Form, withFormik } from 'formik';
-import { withRouter } from 'react-router-dom';
-import { post } from '../../utils/HTTPClient';
-import { capitalize } from '@material-ui/core/utils/helpers';
+import React from "react";
+import * as Yup from "yup";
+import PropTypes from "prop-types";
+import styled from "styled-components";
+import { Form, withFormik } from "formik";
+import { withRouter } from "react-router-dom";
+import { capitalize } from "@material-ui/core/utils/helpers";
 import {
   Grow,
   Zoom,
@@ -22,60 +21,62 @@ import {
   FormHelperText,
   CircularProgress,
   withMobileDialog,
-} from '@material-ui/core';
+} from "@material-ui/core";
+
+import { post } from "../../utils/HTTPClient";
 
 const StyledForm = styled(Form)`
   display: flex;
   flex-direction: column;
 `;
 
-const Transition = props => {
+const Transition = (props) => {
   return <Grow in {...props} />;
 };
 
-const styles = theme => ({
+const styles = (theme) => ({
   singinDialogRoot: {
-    minWidth: '30vw',
+    minWidth: "30vw",
   },
   signinDialogRootXs: {
-    width: '100%',
+    width: "100%",
   },
   signinDialogRootSm: {
-    width: '70%',
+    width: "70%",
   },
   signinDialogRootMd: {
-    width: '50%',
+    width: "50%",
   },
   signinDialogRootLg: {
-    width: '40%',
+    width: "40%",
   },
   signinDialogRootXl: {
-    width: '30%',
+    width: "30%",
   },
   formControl: {
     marginBottom: theme.spacing.unit,
   },
   signinButtonSubmitWrapper: {
-    position: 'relative',
+    position: "relative",
   },
   singinButtonProgress: {
-    left: '50%',
+    left: "50%",
     marginLeft: -12,
     marginTop: -12,
-    position: 'absolute',
-    top: '50%',
+    position: "absolute",
+    top: "50%",
     zIndex: 1,
   },
 });
 
 function getErrorMessage(errorStatus) {
   switch (errorStatus) {
-    case '0':
-      return 'Houve algum problema na conexão.';
-    case '404':
-      return 'Login ou senha estão incorretos';
+    case "0":
+      return "Houve algum problema na conexão.";
+    case "404":
+      return "Login ou senha estão incorretos";
     default:
-      return 'Algo de errado aconteceu.';
+      return "Algo de errado aconteceu.";
   }
 }
 
@@ -112,13 +113,18 @@ const Signin = ({
             error={touched.email && errors.email !== undefined}
           >
             <InputLabel>Email: </InputLabel>
-            <Input name="email" value={values.email || ''} onChange={handleChange} />
-            {touched.email &&
-              errors.email && (
-                <Zoom in>
-                  <FormHelperText id="signin__email-error-text">{errors.email}</FormHelperText>
-                </Zoom>
-              )}
+            <Input
+              name="email"
+              value={values.email || ""}
+              onChange={handleChange}
+            />
+            {touched.email && errors.email && (
+              <Zoom in>
+                <FormHelperText id="signin__email-error-text">
+                  {errors.email}
+                </FormHelperText>
+              </Zoom>
+            )}
           </FormControl>
           <FormControl
             className={classes.formControl}
@@ -132,31 +138,39 @@ const Signin = ({
               value={values.password}
               onChange={handleChange}
             />
-            {touched.password &&
-              errors.password && (
-                <Zoom in>
-                  <FormHelperText id="signin__password-error-text">
-                    {errors.password}
-                  </FormHelperText>
-                </Zoom>
-              )}
+            {touched.password && errors.password && (
+              <Zoom in>
+                <FormHelperText id="signin__password-error-text">
+                  {errors.password}
+                </FormHelperText>
+              </Zoom>
+            )}
           </FormControl>
           <DialogActions>
             <Button color="primary" disabled={isSubmitting} onClick={onClose}>
               Cancelar
             </Button>
             <div className={classes.signinButtonSubmitWrapper}>
-              <Button color="primary" disabled={isSubmitting} onClick={handleSubmit}>
+              <Button
+                color="primary"
+                disabled={isSubmitting}
+                onClick={handleSubmit}
+              >
                 Login
               </Button>
               {isSubmitting && (
-                <CircularProgress size={24} className={classes.singinButtonProgress} />
+                <CircularProgress
+                  size={24}
+                  className={classes.singinButtonProgress}
+                />
               )}
             </div>
           </DialogActions>
           {errors.requestError !== undefined && (
             <Zoom in>
-              <FormHelperText error>{getErrorMessage(errors.requestError)}</FormHelperText>
+              <FormHelperText error>
+                {getErrorMessage(errors.requestError)}
+              </FormHelperText>
             </Zoom>
           )}
         </StyledForm>
@@ -197,42 +211,42 @@ Signin.propTypes = {
 export default withStyles(styles)(
   withWidth()(
     withMobileDialog({
-      breakpoint: 'xs',
+      breakpoint: "xs",
     })(
       withRouter(
         withFormik({
           mapPropsToValues() {
             return {
-              email: '',
-              password: '',
+              email: "",
+              password: "",
             };
           },
           validationSchema: Yup.object().shape({
             email: Yup.string()
-              .email('Email inválido.')
-              .required('Email obrigatório.'),
+              .email("Email inválido.")
+              .required("Email obrigatório."),
             password: Yup.string()
-              .min(6, 'A senha deve ter pelo menos 6 caracteres.')
-              .max(30, 'Senha não pode ter mais que 30 caracteres.')
-              .required('Senha obrigatória.'),
+              .min(6, "A senha deve ter pelo menos 6 caracteres.")
+              .max(30, "Senha não pode ter mais que 30 caracteres.")
+              .required("Senha obrigatória."),
           }),
           handleSubmit(values, { setSubmitting, props, resetForm }) {
-            post('auth', values)
-              .then(res => {
+            post("auth", values)
+              .then((res) => {
                 setSubmitting(false);
-                localStorage.setItem('token', res.data.token);
+                localStorage.setItem("token", res.data.token);
                 resetForm({
-                  email: '',
-                  password: '',
+                  email: "",
+                  password: "",
                 });
                 props.onClose();
-                props.history.push('/');
+                props.history.push("/");
               })
               .catch(setSubmitting(false));
           },
           enableReinitialize: true,
-        })(Signin),
-      ),
-    ),
-  ),
+        })(Signin)
+      )
+    )
+  )
 );

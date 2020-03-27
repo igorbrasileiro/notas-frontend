@@ -2,24 +2,6 @@
   "name": "notas-frontend",
   "version": "0.1.0",
   "private": true,
-  "dependencies": {
-    "@material-ui/core": "^3.2.0",
-    "@material-ui/icons": "^3.0.1",
-    "axios": "^0.18.0",
-    "formik": "^1.3.1",
-    "react": "^16.5.2",
-    "react-dom": "^16.5.2",
-    "react-loadable": "^5.5.0",
-    "react-redux": "^5.0.7",
-    "react-router-dom": "^4.3.1",
-    "react-scripts": "2.0.4",
-    "redux": "^4.0.0",
-    "redux-logger": "^3.0.6",
-    "redux-thunk": "^2.3.0",
-    "styled-components": "^3.4.10",
-    "yup": "^0.26.6",
-    "serve": "^10.0.0"
-  },
   "scripts": {
     "start": "serve -s build",
     "heroku-postbuild": "npm run build",
@@ -28,31 +10,60 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint . --cache && echo \"eslint: no lint errors\"",
-    "prettier": "npm run --silent prettier:files | xargs prettier --write",
-    "prettier:files": "find . -name \"*.js\" -o -name \"*.d.ts\" -o -name \"*.tsx\" | grep -v -f .eslintignore",
-    "prettier:check": "yarn --silent prettier:files | xargs prettier --list-different",
-    "prettier:ci": "prettier --list-different"
+    "prettier": "prettier --write \"**/*.{ts,js,json}\""
   },
-  "eslintConfig": {
-    "extends": "react-app"
+  "dependencies": {
+    "@material-ui/core": "^4.9.7",
+    "@material-ui/icons": "^4.9.1",
+    "axios": "^0.18.0",
+    "formik": "^1.3.1",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-loadable": "^5.5.0",
+    "react-redux": "^5.0.7",
+    "react-router-dom": "^4.3.1",
+    "react-scripts": "2.0.4",
+    "redux": "^4.0.0",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.3.0",
+    "serve": "^11.3.0",
+    "styled-components": "^3.4.10",
+    "yup": "^0.26.6"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{ts,js,tsx,jsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.json": [
+      "prettier --write"
+    ]
+  },
+  "devDependencies": {
+    "@types/react-loadable": "^5.5.3",
+    "@types/react-router-dom": "^5.1.3",
+    "@vtex/prettier-config": "^0.1.3",
+    "@vtex/tsconfig": "^0.4.3",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.8.0",
+    "eslint-config-vtex": "^12.3.0",
+    "eslint-config-vtex-react": "^6.3.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-vtex": "^1.0.3",
+    "husky": "^4.2.3",
+    "lint-staged": "^10.0.9",
+    "prettier": "^2.0.2",
+    "typescript": "^3.8.3"
   },
   "browserslist": [
     ">0.2%",
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ],
-  "devDependencies": {
-    "eslint-config-airbnb": "^17.1.0",
-    "eslint-config-prettier": "^3.1.0",
-    "eslint-import-resolver-webpack": "^0.10.1",
-    "eslint-plugin-babel": "^5.2.1",
-    "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-jsx-a11y": "^6.1.2",
-    "eslint-plugin-material-ui": "^1.0.1",
-    "eslint-plugin-mocha": "^5.2.0",
-    "eslint-plugin-prettier": "^3.0.0",
-    "eslint-plugin-react": "^7.11.1",
-    "prettier": "1.14.3"
-  }
+  ]
 }

@@ -1,12 +1,10 @@
-import React from 'react';
-import * as Yup from 'yup';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import { Form, withFormik } from 'formik';
-import { post } from '../../utils/HTTPClient';
-import { withRouter } from 'react-router-dom';
-import { withStyles } from '@material-ui/core/styles';
-import { FadeInButton } from '../utils/SharedComponents';
+import React from "react";
+import * as Yup from "yup";
+import PropTypes from "prop-types";
+import styled from "styled-components";
+import { Form, withFormik } from "formik";
+import { withRouter } from "react-router-dom";
+import { withStyles } from "@material-ui/core/styles";
 import {
   Zoom,
   Input,
@@ -17,7 +15,10 @@ import {
   CircularProgress,
   Select,
   MenuItem,
-} from '@material-ui/core';
+} from "@material-ui/core";
+
+import { FadeInButton } from "../utils/SharedComponents";
+import { post } from "../../utils/HTTPClient";
 
 const DEFAULT_ANIMATION_TIMING = 700;
 
@@ -77,13 +78,13 @@ const StyledForm = styled(Form)`
   margin-top: 20px;
 `;
 
-const styles = theme => ({
+const styles = (theme) => ({
   signupButtonProgress: {
-    left: '50%',
+    left: "50%",
     marginLeft: -12,
     marginTop: -12,
-    position: 'absolute',
-    top: '50%',
+    position: "absolute",
+    top: "50%",
     zIndex: 1,
   },
   formControl: {
@@ -91,10 +92,10 @@ const styles = theme => ({
   },
   signupButtonWrapper: {
     margin: theme.spacing.unit,
-    position: 'relative',
+    position: "relative",
   },
   signupSubmitButton: {
-    width: '100%',
+    width: "100%",
   },
 });
 
@@ -116,38 +117,51 @@ const Signup = ({
       >
         <InputLabel htmlFor="name">Nome</InputLabel>
         <Input name="name" value={values.name} onChange={handleChange} />
-        {touched.name &&
-          errors.name && (
-            <Zoom in>
-              <FormHelperText id="signup__name-error-text">{errors.name}</FormHelperText>
-            </Zoom>
-          )}
+        {touched.name && errors.name && (
+          <Zoom in>
+            <FormHelperText id="signup__name-error-text">
+              {errors.name}
+            </FormHelperText>
+          </Zoom>
+        )}
       </FormControl>
       <FormControl
         className={classes.formControl}
         error={touched.email && errors.email !== undefined}
       >
         <InputLabel htmlFor="email">Email</InputLabel>
-        <Input name="email" type="email" value={values.email} onChange={handleChange} />
-        {touched.email &&
-          errors.email && (
-            <Zoom in>
-              <FormHelperText id="signup__email-error-text">{errors.email}</FormHelperText>
-            </Zoom>
-          )}
+        <Input
+          name="email"
+          type="email"
+          value={values.email}
+          onChange={handleChange}
+        />
+        {touched.email && errors.email && (
+          <Zoom in>
+            <FormHelperText id="signup__email-error-text">
+              {errors.email}
+            </FormHelperText>
+          </Zoom>
+        )}
       </FormControl>
       <FormControl
         className={classes.formControl}
         error={touched.password && errors.password !== undefined}
       >
         <InputLabel htmlFor="password">Senha</InputLabel>
-        <Input name="password" type="password" value={values.password} onChange={handleChange} />
-        {touched.password &&
-          errors.password && (
-            <Zoom in>
-              <FormHelperText id="signup__password-error-text">{errors.password}</FormHelperText>
-            </Zoom>
-          )}
+        <Input
+          name="password"
+          type="password"
+          value={values.password}
+          onChange={handleChange}
+        />
+        {touched.password && errors.password && (
+          <Zoom in>
+            <FormHelperText id="signup__password-error-text">
+              {errors.password}
+            </FormHelperText>
+          </Zoom>
+        )}
       </FormControl>
       <FormControl required className={classes.formControl}>
         <InputLabel htmlFor="type-required">Tipo</InputLabel>
@@ -156,12 +170,12 @@ const Signup = ({
           value={values.role}
           onChange={handleChange}
           inputProps={{
-            id: 'type-required',
+            id: "type-required",
           }}
         >
-          <MenuItem value={''}>Selecione seu tipo</MenuItem>
-          <MenuItem value={'student'}>Aluno</MenuItem>
-          <MenuItem value={'teacher'}>Professor</MenuItem>
+          <MenuItem value="">Selecione seu tipo</MenuItem>
+          <MenuItem value="student">Aluno</MenuItem>
+          <MenuItem value="teacher">Professor</MenuItem>
         </Select>
       </FormControl>
       <div className={classes.signupButtonWrapper}>
@@ -173,7 +187,12 @@ const Signup = ({
         >
           Registrar
         </FadeInButton>
-        {isSubmitting && <CircularProgress size={24} className={classes.signupButtonProgress} />}
+        {isSubmitting && (
+          <CircularProgress
+            size={24}
+            className={classes.signupButtonProgress}
+          />
+        )}
       </div>
       <FadeInButton
         color="secondary"
@@ -217,50 +236,50 @@ export default withRouter(
   withFormik({
     mapPropsToValues() {
       return {
-        name: '',
-        email: '',
-        password: '',
-        role: '',
+        name: "",
+        email: "",
+        password: "",
+        role: "",
       };
     },
     validationSchema: () =>
       Yup.object().shape({
         email: Yup.string()
           .trim()
-          .email('Você deve passar um email válido.')
-          .required('Email obrigatório.'),
+          .email("Você deve passar um email válido.")
+          .required("Email obrigatório."),
         name: Yup.string()
           .trim()
           .lowercase()
-          .min(6, 'Nome deve ter pelo menos 6 caracteres.')
-          .max(50, 'Nome não pode ter mais de 50 caracteres.')
-          .required('Nome obrigatório'),
+          .min(6, "Nome deve ter pelo menos 6 caracteres.")
+          .max(50, "Nome não pode ter mais de 50 caracteres.")
+          .required("Nome obrigatório"),
         password: Yup.string()
-          .min(6, 'A senha deve ter pelo menos 6 caracteres.')
-          .max(30, 'Senha não pode ter mais que 30 caracteres.')
-          .required('Senha obrigatória.'),
+          .min(6, "A senha deve ter pelo menos 6 caracteres.")
+          .max(30, "Senha não pode ter mais que 30 caracteres.")
+          .required("Senha obrigatória."),
         role: Yup.string()
-          .oneOf(['student', 'teacher'])
-          .required('Tipo obrigatório.'),
+          .oneOf(["student", "teacher"])
+          .required("Tipo obrigatório."),
       }),
     handleSubmit(values, { setSubmitting, props, resetForm }) {
-      post('user', values)
+      post("user", values)
         .then(() => {
           setSubmitting(false);
           resetForm({
-            name: '',
-            email: '',
-            password: '',
-            role: '',
+            name: "",
+            email: "",
+            password: "",
+            role: "",
           });
-          post('auth', { email: values.email, password: values.password })
-            .then(res => {
-              localStorage.setItem('token', res.data.token);
-              props.history.push('/');
+          post("auth", { email: values.email, password: values.password })
+            .then((res) => {
+              localStorage.setItem("token", res.data.token);
+              props.history.push("/");
             })
             .catch();
         })
         .catch(setSubmitting(false));
     },
-  })(withStyles(styles)(Signup)),
+  })(withStyles(styles)(Signup))
 );

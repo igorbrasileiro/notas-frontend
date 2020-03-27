@@ -1,9 +1,8 @@
-import * as Yup from 'yup';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { Form, withFormik } from 'formik';
-import React, { PureComponent } from 'react';
-import { createTeacherSubject } from '../../../actions/subject';
+import * as Yup from "yup";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { Form, withFormik } from "formik";
+import React, { PureComponent } from "react";
 import {
   Card,
   CardHeader,
@@ -17,48 +16,50 @@ import {
   CardContent,
   Zoom,
   withStyles,
-} from '@material-ui/core';
+} from "@material-ui/core";
 
-const style = theme => ({
+import { createTeacherSubject } from "../../../actions/subject";
+
+const style = (theme) => ({
   root: {
     marginTop: theme.spacing.unit * 2,
   },
   paper: {
-    backgroundColor: 'inherit',
-    boxShadow: 'none',
+    backgroundColor: "inherit",
+    boxShadow: "none",
   },
   addButton: {
     marginRight: theme.spacing.unit * 2,
     marginTop: theme.spacing.unit,
   },
   form: {
-    display: 'flex',
-    justifyContent: 'space-between',
+    display: "flex",
+    justifyContent: "space-between",
   },
   formControl: {
     marginBottom: theme.spacing.unit,
-    width: '100%',
-    '&:not(:last-child)': {
+    width: "100%",
+    "&:not(:last-child)": {
       marginRight: theme.spacing.unit,
     },
   },
   actions: {
-    display: 'flex',
-    justifyContent: 'flex-end',
+    display: "flex",
+    justifyContent: "flex-end",
     marginBottom: theme.spacing.unit,
   },
 });
 
-const fields = ['name', 'spreadsheetId'];
+const fields = ["name", "spreadsheetId"];
 
-const convertToLabel = field => {
+const convertToLabel = (field) => {
   switch (field) {
     case fields[0]:
-      return 'Nome da Disciplina';
+      return "Nome da Disciplina";
     case fields[1]:
-      return 'Spreadsheet ID';
+      return "Spreadsheet ID";
     default:
-      return '';
+      return "";
   }
 };
 
@@ -122,7 +123,7 @@ class TeacherCreateSubjectCard extends PureComponent {
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
             <Form className={classes.form}>
-              {fields.map(field => (
+              {fields.map((field) => (
                 <FormControl
                   key={field}
                   className={classes.formControl}
@@ -131,15 +132,20 @@ class TeacherCreateSubjectCard extends PureComponent {
                   <InputLabel shrink margin="dense" htmlFor={field}>
                     {convertToLabel(field)}
                   </InputLabel>
-                  <Input name={field} value={values[field]} onChange={handleChange} />
-                  {touched[field] &&
-                    errors[field] && (
-                      <Zoom in>
-                        <FormHelperText id={`create-subject__${field}-error-text`}>
-                          {errors[field]}
-                        </FormHelperText>
-                      </Zoom>
-                    )}
+                  <Input
+                    name={field}
+                    value={values[field]}
+                    onChange={handleChange}
+                  />
+                  {touched[field] && errors[field] && (
+                    <Zoom in>
+                      <FormHelperText
+                        id={`create-subject__${field}-error-text`}
+                      >
+                        {errors[field]}
+                      </FormHelperText>
+                    </Zoom>
+                  )}
                 </FormControl>
               ))}
             </Form>
@@ -189,44 +195,45 @@ TeacherCreateSubjectCard.propTypes = {
 
 function mapDispatchToProps(dispatch) {
   return {
-    createSubject: input => dispatch(createTeacherSubject(input)),
+    createSubject: (input) => dispatch(createTeacherSubject(input)),
   };
 }
 
 export default connect(
   null,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(
   withFormik({
     mapPropsToValues() {
       return {
-        name: '',
-        spreadsheetId: '',
+        name: "",
+        spreadsheetId: "",
       };
     },
     validationSchema: () =>
       Yup.object().shape({
-        name: Yup.string().required('Nome da Disciplina não pode ser vazio!'),
+        name: Yup.string().required("Nome da Disciplina não pode ser vazio!"),
         spreadsheetId: Yup.string().matches(/(\w|\d|[-|_]?)+/, {
-          message: 'Padrão da Spreadsheet ID está errado!',
+          message: "Padrão da Spreadsheet ID está errado!",
           excludeEmptyString: true,
         }),
       }),
     handleSubmit(values, { props, resetForm, setSubmitting }) {
       props
         .createSubject(values)
-        .then(res => {
-          if (res.data) {
-            setSubmitting(false);
-            resetForm({
-              name: '',
-              spreadsheetId: '',
-            });
+        .then((res) => {
+          if (!res.data) {
+            return;
           }
+          setSubmitting(false);
+          resetForm({
+            name: "",
+            spreadsheetId: "",
+          });
         })
         .catch(() => {
           setSubmitting(false);
         });
     },
-  })(withStyles(style)(TeacherCreateSubjectCard)),
+  })(withStyles(style)(TeacherCreateSubjectCard))
 );

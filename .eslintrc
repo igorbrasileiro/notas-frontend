@@ -1,0 +1,22 @@
+{
+  "root": true,
+  "env": {
+    "node": true,
+    "es6": true,
+    "jest": true
+  },
+  "extends": ["vtex","vtex-react"],
+  "overrides": [
+    {
+      "files": ["*.js", "*.jsx"],
+      "parser": "babel-eslint",
+      "parserOptions": {
+        "sourceType": "module"
+      }
+    }
+  ],
+  "rules": {
+    "arrow-parens": [2, "always"],
+    "react/jsx-filename-extension": "off"
+  }
+}

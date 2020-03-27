@@ -1,9 +1,10 @@
-import PropTypes from 'prop-types';
-import { clearStore } from '../../actions';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
-import React, { Component, Fragment } from 'react';
-import { Menu, MenuItem, withStyles } from '@material-ui/core';
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
+import React, { Component, Fragment } from "react";
+import { Menu, MenuItem, withStyles } from "@material-ui/core";
+
+import { clearStore } from "../../actions";
 
 const styles = {
   userMenu: {
@@ -21,13 +22,13 @@ class UserMenu extends Component {
 
   handleLogout() {
     const { resetStore, onClose } = this.props;
-    localStorage.removeItem('token');
+    localStorage.removeItem("token");
     resetStore();
     onClose();
-    this.goToRoute('/landing');
+    this.goToRoute("/landing");
   }
 
-  goToRoute(path = '/') {
+  goToRoute(path = "/") {
     this.props.history.push(path);
     this.props.onClose();
   }
@@ -43,8 +44,8 @@ class UserMenu extends Component {
           classes={{ paper: classes.userMenu }}
           anchorEl={anchorEl}
           anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
+            vertical: "top",
+            horizontal: "right",
           }}
           open={open}
           onClose={onClose}
@@ -77,5 +78,5 @@ function mapDispatchToProps(dispatch) {
 
 export default connect(
   null,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(withStyles(styles)(withRouter(UserMenu)));

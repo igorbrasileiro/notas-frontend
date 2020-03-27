@@ -1,8 +1,8 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import { withStyles } from '@material-ui/core/styles';
-import { Button, withWidth, Typography, Grow } from '@material-ui/core';
+import React from "react";
+import PropTypes from "prop-types";
+import styled from "styled-components";
+import { withStyles } from "@material-ui/core/styles";
+import { Button, withWidth, Typography, Grow } from "@material-ui/core";
 
 export const FadeInButton = styled(Button)`
   animation: fadeIn ${({ delay }) => delay * 2}ms;
@@ -33,7 +33,7 @@ export const ActionsContainer = styled.div`
   width: 100%;
 `;
 
-export const DefaultDialogTransition = props => <Grow in {...props} />;
+export const DefaultDialogTransition = (props) => <Grow in {...props} />;
 
 export const GridContainer = styled.div`
   display: grid;
@@ -41,7 +41,7 @@ export const GridContainer = styled.div`
   grid-gap: 6px;
   grid-template-columns: repeat(auto-fill, minmax(225px, 1fr));
   &:before {
-    content: '';
+    content: "";
     width: 0;
     padding-bottom: 100%;
     grid-row: 1 / 1;
@@ -54,46 +54,54 @@ export const GridContainer = styled.div`
 `;
 
 // -------------------------------------------------------
-const styles = theme => ({
+const styles = (theme) => ({
   title: {
     margin: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`,
   },
 });
 
 const subTitleVariants = {
-  xs: 'h5',
-  sm: 'h4',
-  md: 'h4',
-  lg: 'h3',
-  xl: 'h3',
+  xs: "h5",
+  sm: "h4",
+  md: "h4",
+  lg: "h3",
+  xl: "h3",
 };
 
 const titleVariants = {
-  xs: 'h4',
-  sm: 'h3',
-  md: 'h3',
-  lg: 'h2',
-  xl: 'h2',
+  xs: "h4",
+  sm: "h3",
+  md: "h3",
+  lg: "h2",
+  xl: "h2",
 };
 
 const Title = (variants, component) =>
   withWidth()(
     withStyles(styles)(({ children, classes, width }) => (
-      <Typography className={classes.title} variant={variants[width]} component={component}>
+      <Typography
+        className={classes.title}
+        variant={variants[width]}
+        component={component}
+      >
         {children}
       </Typography>
-    )),
+    ))
   );
 Title.propTypes = {
   children: PropTypes.string.isRequired,
   classes: PropTypes.object,
-  component: PropTypes.oneOfType([PropTypes.string, PropTypes.func, PropTypes.object]),
+  component: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.func,
+    PropTypes.object,
+  ]),
   width: PropTypes.string,
 };
 
 Title.defaultProps = {
-  component: 'h1',
+  component: "h1",
 };
 
 export const ResponsiveTitle = Title(titleVariants);
-export const ResponsiveSubTitle = Title(subTitleVariants, 'h2');
+export const ResponsiveSubTitle = Title(subTitleVariants, "h2");

@@ -1,6 +1,6 @@
-import React from 'react';
-import { Form } from 'formik';
-import PropTypes from 'prop-types';
+import React from "react";
+import { Form } from "formik";
+import PropTypes from "prop-types";
 import {
   CardContent,
   FormControl,
@@ -8,25 +8,31 @@ import {
   InputLabel,
   Input,
   Zoom,
-} from '@material-ui/core';
+} from "@material-ui/core";
 
-const fields = ['name', 'spreadsheetId'];
+const fields = ["name", "spreadsheetId"];
 
-const convertToLabel = field => {
+const convertToLabel = (field) => {
   switch (field) {
     case fields[0]:
-      return 'Nome da Disciplina';
+      return "Nome da Disciplina";
     case fields[1]:
-      return 'Spreadsheet ID';
+      return "Spreadsheet ID";
     default:
-      return '';
+      return "";
   }
 };
 
-const TeacherCardContent = ({ classes, errors, handleChange, touched, values }) => (
+const TeacherCardContent = ({
+  classes,
+  errors,
+  handleChange,
+  touched,
+  values,
+}) => (
   <CardContent>
     <Form className={classes.form}>
-      {fields.map(field => (
+      {fields.map((field) => (
         <FormControl
           key={field}
           className={classes.formControl}
@@ -36,14 +42,13 @@ const TeacherCardContent = ({ classes, errors, handleChange, touched, values }) 
             {convertToLabel(field)}
           </InputLabel>
           <Input name={field} value={values[field]} onChange={handleChange} />
-          {touched[field] &&
-            errors[field] && (
-              <Zoom in>
-                <FormHelperText id={`create-subject__${field}-error-text`}>
-                  {errors[field]}
-                </FormHelperText>
-              </Zoom>
-            )}
+          {touched[field] && errors[field] && (
+            <Zoom in>
+              <FormHelperText id={`create-subject__${field}-error-text`}>
+                {errors[field]}
+              </FormHelperText>
+            </Zoom>
+          )}
         </FormControl>
       ))}
     </Form>

@@ -1,13 +1,14 @@
-import PropTypes from 'prop-types';
-import UserInfo from '../UserInfo';
-import { connect } from 'react-redux';
-import styled from 'styled-components';
-import React, { Component } from 'react';
-import ApplicationBar from './ApplicationBar';
-import { withStyles } from '@material-ui/core';
-import { NO_LOGGED_USER } from '../../reducers/user';
-import { fetchLoggedUser } from '../../actions/user';
-import { fetchUserSubjects } from '../../actions/subject';
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import styled from "styled-components";
+import React, { Component } from "react";
+import { withStyles } from "@material-ui/core";
+
+import ApplicationBar from "./ApplicationBar";
+import UserInfo from "../UserInfo";
+import { NO_LOGGED_USER } from "../../reducers/user";
+import { fetchLoggedUser } from "../../actions/user";
+import { fetchUserSubjects } from "../../actions/subject";
 
 const MainContainer = styled.main`
   align-items: center;
@@ -20,12 +21,12 @@ const MainContainer = styled.main`
 
 const styles = {
   wrapper: {
-    alignItens: 'center',
-    backgroundColor: 'inherit',
-    display: 'flex',
-    flex: '1 1 auto',
-    flexDirection: 'column',
-    width: '100%',
+    alignItens: "center",
+    backgroundColor: "inherit",
+    display: "flex",
+    flex: "1 1 auto",
+    flexDirection: "column",
+    width: "100%",
   },
 };
 
@@ -56,7 +57,10 @@ Home.propTypes = {
 };
 
 function mapStateToProps({ user }) {
-  const role = user.loggedUserId !== NO_LOGGED_USER ? user.byId[user.loggedUserId].role : '';
+  const role =
+    user.loggedUserId !== NO_LOGGED_USER
+      ? user.byId[user.loggedUserId].role
+      : "";
   return {
     role,
   };
@@ -71,5 +75,5 @@ function mapDispatchToProps(dispatch) {
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(withStyles(styles)(Home));

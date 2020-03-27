@@ -1,1 +1,1 @@
-export default () => '... Loading';
+export default () => "... Loading";

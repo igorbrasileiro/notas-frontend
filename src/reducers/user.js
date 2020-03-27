@@ -1,7 +1,11 @@
-import { concatIdIfNotContain } from '../utils/helpers';
-import { SAVE_USER, REMOVE_ALL_USERS, SET_LOGGED_USER } from '../actions/actionTypes';
+import { concatIdIfNotContain } from "../utils/helpers";
+import {
+  SAVE_USER,
+  REMOVE_ALL_USERS,
+  SET_LOGGED_USER,
+} from "../actions/actionTypes";
 
-export const NO_LOGGED_USER = '-1';
+export const NO_LOGGED_USER = "-1";
 
 const DEFAULT_STATE = {
   allIds: [],

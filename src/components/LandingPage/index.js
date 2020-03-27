@@ -1,9 +1,10 @@
-import SignUp from './SignUp';
-import SignIn from './SignIn';
-import PropTypes from 'prop-types';
-import theme from '../utils/theme';
-import styled from 'styled-components';
-import React, { Component } from 'react';
+import PropTypes from "prop-types";
+import styled from "styled-components";
+import React, { Component } from "react";
+
+import SignUp from "./SignUp";
+import SignIn from "./SignIn";
+import theme from "../utils/theme";
 
 const LandingContainer = styled.div`
   align-items: center;

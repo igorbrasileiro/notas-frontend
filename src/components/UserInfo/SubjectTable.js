@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Table,
   TableBody,
@@ -9,18 +9,18 @@ import {
   Paper,
   Typography,
   withStyles,
-} from '@material-ui/core';
-import PropTypes from 'prop-types';
+} from "@material-ui/core";
+import PropTypes from "prop-types";
 
-const styles = theme => ({
+const styles = (theme) => ({
   title: {
     paddingTop: theme.spacing.unit * 3,
     margin: theme.spacing.unit * 3,
   },
   paper: {
-    width: '70%',
-    marginLeft: 'auto',
-    marginRight: 'auto',
+    width: "70%",
+    marginLeft: "auto",
+    marginRight: "auto",
   },
 });
 

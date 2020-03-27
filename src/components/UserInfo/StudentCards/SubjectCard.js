@@ -1,10 +1,9 @@
-import PropTypes from 'prop-types';
-import classnames from 'classnames';
-import { connect } from 'react-redux';
-import React, { Component } from 'react';
-import red from '@material-ui/core/colors/red';
-import { deleteStudentSubject } from '../../../actions/subject';
-import { ExpandMore, DeleteForever } from '@material-ui/icons';
+import PropTypes from "prop-types";
+import classnames from "classnames";
+import { connect } from "react-redux";
+import React, { Component } from "react";
+import red from "@material-ui/core/colors/red";
+import { ExpandMore, DeleteForever } from "@material-ui/icons";
 import {
   Card,
   Avatar,
@@ -15,11 +14,13 @@ import {
   CardContent,
   TextField,
   CardActions,
-} from '@material-ui/core';
+} from "@material-ui/core";
 
-const styles = theme => ({
+import { deleteStudentSubject } from "../../../actions/subject";
+
+const styles = (theme) => ({
   root: {
-    width: '100%',
+    width: "100%",
     marginTop: theme.spacing.unit * 2,
   },
   avatar: {
@@ -27,43 +28,43 @@ const styles = theme => ({
   },
   expand: {
     marginTop: theme.spacing.unit,
-    transform: 'rotate(0deg)',
-    transition: theme.transitions.create('transform', {
+    transform: "rotate(0deg)",
+    transition: theme.transitions.create("transform", {
       duration: theme.transitions.duration.shortest,
     }),
-    marginLeft: 'auto',
-    [theme.breakpoints.up('sm')]: {
+    marginLeft: "auto",
+    [theme.breakpoints.up("sm")]: {
       marginRight: 0,
     },
   },
   expandOpen: {
-    transform: 'rotate(180deg)',
+    transform: "rotate(180deg)",
   },
   row: {
-    display: 'flex',
-    justifyContent: 'flex-start',
-    [theme.breakpoints.down('sm')]: {
-      flexDirection: 'column',
+    display: "flex",
+    justifyContent: "flex-start",
+    [theme.breakpoints.down("sm")]: {
+      flexDirection: "column",
     },
-    [theme.breakpoints.up('sm')]: {
-      flexDirection: 'row',
+    [theme.breakpoints.up("sm")]: {
+      flexDirection: "row",
     },
   },
   gradesGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(70px, 1fr))',
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fill, minmax(70px, 1fr))",
     columnGap: theme.spacing.unit,
-    gridAutoRows: '1fr',
+    gridAutoRows: "1fr",
   },
   grade: {
-    width: '100%',
-    '&:not(:last-child)': {
+    width: "100%",
+    "&:not(:last-child)": {
       marginRight: theme.spacing.unit,
     },
   },
 });
 
-const hash = grade => {
+const hash = (grade) => {
   const date = new Date();
   return date.toString().concat(grade + Math.random(100));
 };
@@ -98,7 +99,7 @@ const SubjectContent = ({ classes, expanded, onHandleRemove, subject }) => (
       </div>
       <div className={classes.gradesGrid}>
         {subject.grades &&
-          subject.grades.map(grade => (
+          subject.grades.map((grade) => (
             <TextField
               key={hash(grade)}
               label="Nota"
@@ -158,7 +159,7 @@ class SubjectCard extends Component {
   }
 
   handleExpandClick() {
-    this.setState(prevState => ({ expanded: !prevState.expanded }));
+    this.setState((prevState) => ({ expanded: !prevState.expanded }));
   }
 
   render() {
@@ -168,7 +169,11 @@ class SubjectCard extends Component {
     return (
       <Card className={classes.root}>
         <CardHeader
-          avatar={<Avatar className={classes.avatar}>{subject.subject.name.slice(0, 1)}</Avatar>}
+          avatar={
+            <Avatar className={classes.avatar}>
+              {subject.subject.name.slice(0, 1)}
+            </Avatar>
+          }
           title={subject.subject.name}
           subheader={subject.subject.createdAt.slice(0, 10)}
           action={
@@ -209,11 +214,11 @@ SubjectCard.propTypes = {
 
 function mapDispatchToProps(dispatch) {
   return {
-    removeStudentSubject: id => dispatch(deleteStudentSubject(id)),
+    removeStudentSubject: (id) => dispatch(deleteStudentSubject(id)),
   };
 }
 
 export default connect(
   null,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(withStyles(styles)(SubjectCard));

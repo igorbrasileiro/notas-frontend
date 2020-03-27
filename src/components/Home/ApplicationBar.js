@@ -1,12 +1,19 @@
-import UserMenu from './UserMenu';
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import { AccountCircle } from '@material-ui/icons';
-import { AppBar, IconButton, Toolbar, Typography, withStyles } from '@material-ui/core';
+import PropTypes from "prop-types";
+import React, { Component } from "react";
+import { AccountCircle } from "@material-ui/icons";
+import {
+  AppBar,
+  IconButton,
+  Toolbar,
+  Typography,
+  withStyles,
+} from "@material-ui/core";
 
-const USER_MENU_ID = 'appbar__user-menu';
+import UserMenu from "./UserMenu";
 
-const styles = theme => ({
+const USER_MENU_ID = "appbar__user-menu";
+
+const styles = (theme) => ({
   appTitle: {
     color: theme.palette.common.white,
     flex: 1,
@@ -16,13 +23,13 @@ const styles = theme => ({
   },
   selectRoot: {
     color: theme.palette.common.white,
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up("sm")]: {
       maxWidth: 250,
     },
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down("sm")]: {
       maxWidth: 200,
     },
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down("xs")]: {
       maxWidth: 110,
     },
   },
@@ -37,7 +44,7 @@ class ApplicationBar extends Component {
     };
   }
 
-  handleOpenUserMenu = event => {
+  handleOpenUserMenu = (event) => {
     this.setState({ anchorEl: event.currentTarget });
   };
 
@@ -52,7 +59,11 @@ class ApplicationBar extends Component {
     return (
       <AppBar position="fixed">
         <Toolbar>
-          <Typography className={classes.appTitle} variant="h6" color="textSecondary">
+          <Typography
+            className={classes.appTitle}
+            variant="h6"
+            color="textSecondary"
+          >
             APP Notas
           </Typography>
           <IconButton
@@ -63,7 +74,11 @@ class ApplicationBar extends Component {
           >
             <AccountCircle className={classes.userIcon} />
           </IconButton>
-          <UserMenu anchorEl={anchorEl} menuId={USER_MENU_ID} onClose={this.handleCloseUserMenu} />
+          <UserMenu
+            anchorEl={anchorEl}
+            menuId={USER_MENU_ID}
+            onClose={this.handleCloseUserMenu}
+          />
         </Toolbar>
       </AppBar>
     );

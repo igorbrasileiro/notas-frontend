@@ -1,14 +1,21 @@
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import React from 'react';
-import red from '@material-ui/core/colors/red';
-import { DeleteForever } from '@material-ui/icons';
-import { deleteTeacherSubject } from '../../../actions/subject';
-import { Card, Avatar, IconButton, CardHeader, withStyles } from '@material-ui/core';
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import React from "react";
+import red from "@material-ui/core/colors/red";
+import { DeleteForever } from "@material-ui/icons";
+import {
+  Card,
+  Avatar,
+  IconButton,
+  CardHeader,
+  withStyles,
+} from "@material-ui/core";
 
-const styles = theme => ({
+import { deleteTeacherSubject } from "../../../actions/subject";
+
+const styles = (theme) => ({
   root: {
-    width: '100%',
+    width: "100%",
     marginTop: theme.spacing.unit * 2,
   },
   avatar: {
@@ -16,8 +23,8 @@ const styles = theme => ({
   },
   removeBtn: {
     marginTop: theme.spacing.unit,
-    marginLeft: 'auto',
-    [theme.breakpoints.up('sm')]: {
+    marginLeft: "auto",
+    [theme.breakpoints.up("sm")]: {
       marginRight: 0,
     },
   },
@@ -37,9 +44,11 @@ RemoveSubjectButton.propTypes = {
 const TeacherSubjectCard = ({ classes, removeTeacherSubject, subject }) => (
   <Card className={classes.root}>
     <CardHeader
-      avatar={<Avatar className={classes.avatar}>{subject.name.slice(0, 1)}</Avatar>}
+      avatar={
+        <Avatar className={classes.avatar}>{subject.name.slice(0, 1)}</Avatar>
+      }
       title={subject.name}
-      subheader={'Sheet ID: '.concat(subject.spreadsheetId)}
+      subheader={"Sheet ID: ".concat(subject.spreadsheetId)}
       action={
         <RemoveSubjectButton
           classes={classes}
@@ -62,11 +71,11 @@ TeacherSubjectCard.propTypes = {
 
 function mapDispatchToProps(dispatch) {
   return {
-    removeTeacherSubject: id => dispatch(deleteTeacherSubject(id)),
+    removeTeacherSubject: (id) => dispatch(deleteTeacherSubject(id)),
   };
 }
 
 export default connect(
   null,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(withStyles(styles)(TeacherSubjectCard));

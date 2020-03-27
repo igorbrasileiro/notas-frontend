@@ -1,10 +1,13 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import SubjectCard from './SubjectCard';
+import React from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+
+import SubjectCard from "./SubjectCard";
 
 const SubjectList = ({ subjects }) =>
-  subjects.map(subject => <SubjectCard key={subject._id} subject={subject} />);
+  subjects.map((subject) => (
+    <SubjectCard key={subject._id} subject={subject} />
+  ));
 
 SubjectList.propTypes = {
   subjects: PropTypes.arrayOf(
@@ -18,13 +21,13 @@ SubjectList.propTypes = {
         createdAt: PropTypes.string.isRequired,
         name: PropTypes.string.isRequired,
       }).isRequired,
-    }),
+    })
   ).isRequired,
 };
 
 function mapStateToProps({ subject }) {
   return {
-    subjects: subject.allIds.map(id => subject.byId[id]),
+    subjects: subject.allIds.map((id) => subject.byId[id]),
   };
 }
 
