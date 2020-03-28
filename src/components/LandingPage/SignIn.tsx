@@ -1,18 +1,15 @@
-import React from "react";
+import React, { PropsWithChildren, ReactNode } from "react";
 import * as Yup from "yup";
-import PropTypes from "prop-types";
-import { Form, withFormik } from "formik";
-import { withRouter } from "react-router-dom";
-import { capitalize } from "@material-ui/core/utils";
+import classNames from "classnames";
+import { Form, withFormik, FormikProps, FormikBag, FormikErrors } from "formik";
+import { withRouter, RouteComponentProps } from "react-router-dom";
 import {
   Grow,
   Zoom,
   Input,
   Button,
   Dialog,
-  withWidth,
   InputLabel,
-  withStyles,
   DialogTitle,
   FormControl,
   DialogActions,
@@ -20,15 +17,42 @@ import {
   FormHelperText,
   CircularProgress,
   withMobileDialog,
+  Theme,
+  makeStyles,
+  GrowProps,
+  WithMobileDialog,
 } from "@material-ui/core";
 
 import { post } from "../../utils/HTTPClient";
 
-const Transition = (props) => {
+const Transition = (props: GrowProps) => {
   return <Grow in {...props} />;
 };
 
-const styles = (theme) => ({
+interface SignInExternalProps extends RouteComponentProps {
+  open: boolean;
+  onClose: () => void;
+}
+
+interface FormikValues {
+  email: string;
+  password: string;
+}
+
+interface CustomFormikError extends FormikErrors<FormikValues> {
+  requestError?: string;
+}
+
+type SignInInterProps = WithMobileDialog & {
+  errors: CustomFormikError;
+};
+
+type Props = SignInExternalProps &
+  FormikProps<FormikValues> &
+  Partial<SignInInterProps> &
+  PropsWithChildren<ReactNode>;
+
+const useStyles = makeStyles((theme: Theme) => ({
   form: {
     display: "flex",
     flexDirection: "column",
@@ -52,7 +76,7 @@ const styles = (theme) => ({
     width: "30%",
   },
   formControl: {
-    marginBottom: theme.spacing.unit,
+    marginBottom: theme.spacing(),
   },
   signinButtonSubmitWrapper: {
     position: "relative",
@@ -65,9 +89,9 @@ const styles = (theme) => ({
     top: "50%",
     zIndex: 1,
   },
-});
+}));
 
-function getErrorMessage(errorStatus) {
+function getErrorMessage(errorStatus: string) {
   switch (errorStatus) {
     case "0":
       return "Houve algum problema na conexão.";
@@ -78,8 +102,7 @@ function getErrorMessage(errorStatus) {
   }
 }
 
-const Signin = ({
-  classes,
+const Signin: React.FC<Props> = ({
   errors,
   fullScreen,
   handleChange,
@@ -91,7 +114,8 @@ const Signin = ({
   onClose,
   touched,
   width,
-}) => {
+}: Props) => {
+  const classes = useStyles();
   return (
     <Dialog
       fullScreen={fullScreen}
@@ -100,7 +124,13 @@ const Signin = ({
       TransitionComponent={Transition}
       onBackdropClick={handleReset}
       classes={{
-        paper: classes[`signinDialogRoot${capitalize(width)}`],
+        paper: classNames({
+          [classes.signinDialogRootXs]: width === "xs",
+          [classes.signinDialogRootSm]: width === "sm",
+          [classes.signinDialogRootMd]: width === "md",
+          [classes.signinDialogRootLg]: width === "lg",
+          [classes.signinDialogRootXl]: width === "xl",
+        }),
       }}
     >
       <DialogTitle>Login</DialogTitle>
@@ -152,7 +182,7 @@ const Signin = ({
               <Button
                 color="primary"
                 disabled={isSubmitting}
-                onClick={handleSubmit}
+                onClick={() => handleSubmit()}
               >
                 Login
               </Button>
@@ -181,70 +211,46 @@ Signin.defaultProps = {
   open: false,
 };
 
-Signin.propTypes = {
-  classes: PropTypes.object,
-  errors: PropTypes.shape({
-    email: PropTypes.string,
-    password: PropTypes.string,
-    requestError: PropTypes.string,
-  }).isRequired,
-  fullScreen: PropTypes.bool.isRequired,
-  handleChange: PropTypes.func.isRequired,
-  handleReset: PropTypes.func.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
-  isSubmitting: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
-  open: PropTypes.bool,
-  touched: PropTypes.shape({
-    email: PropTypes.bool,
-    password: PropTypes.bool,
-  }).isRequired,
-  values: PropTypes.shape({
-    email: PropTypes.string,
-    password: PropTypes.string,
-  }).isRequired,
-  width: PropTypes.string.isRequired,
-};
-
-export default withStyles(styles)(
-  withWidth()(
-    withMobileDialog({
-      breakpoint: "xs",
-    })(
-      withRouter(
-        withFormik({
-          mapPropsToValues() {
-            return {
+const SignInFinalComponent = withMobileDialog({
+  breakpoint: "xs",
+})(
+  withRouter(
+    withFormik<SignInExternalProps, FormikValues>({
+      mapPropsToValues() {
+        return {
+          email: "",
+          password: "",
+        };
+      },
+      validationSchema: Yup.object().shape({
+        email: Yup.string()
+          .email("Email inválido.")
+          .required("Email obrigatório."),
+        password: Yup.string()
+          .min(6, "A senha deve ter pelo menos 6 caracteres.")
+          .max(30, "Senha não pode ter mais que 30 caracteres.")
+          .required("Senha obrigatória."),
+      }),
+      handleSubmit(
+        values,
+        { setSubmitting, props, resetForm }: FormikBag<SignInExternalProps, {}>
+      ) {
+        post("auth", values)
+          .then((res) => {
+            setSubmitting(false);
+            localStorage.setItem("token", res.data.token);
+            resetForm({
               email: "",
               password: "",
-            };
-          },
-          validationSchema: Yup.object().shape({
-            email: Yup.string()
-              .email("Email inválido.")
-              .required("Email obrigatório."),
-            password: Yup.string()
-              .min(6, "A senha deve ter pelo menos 6 caracteres.")
-              .max(30, "Senha não pode ter mais que 30 caracteres.")
-              .required("Senha obrigatória."),
-          }),
-          handleSubmit(values, { setSubmitting, props, resetForm }) {
-            post("auth", values)
-              .then((res) => {
-                setSubmitting(false);
-                localStorage.setItem("token", res.data.token);
-                resetForm({
-                  email: "",
-                  password: "",
-                });
-                props.onClose();
-                props.history.push("/");
-              })
-              .catch(setSubmitting(false));
-          },
-          enableReinitialize: true,
-        })(Signin)
-      )
-    )
+            });
+            props.onClose();
+            props.history.push("/");
+          })
+          .catch(() => setSubmitting(false));
+      },
+      enableReinitialize: true,
+    })(Signin)
   )
 );
+
+export default SignInFinalComponent;

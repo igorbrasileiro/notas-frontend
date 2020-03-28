@@ -1,24 +1,30 @@
-import PropTypes from "prop-types";
 import React, { Component } from "react";
-import { withStyles } from "@material-ui/core";
+import { withStyles, createStyles, Theme } from "@material-ui/core";
 
 import SignUp from "./SignUp";
 import SignIn from "./SignIn";
+import { ComponentWithClasses } from "../utils/classes";
 
-const styles = (theme) => ({
-  root: {
-    alignItems: "center",
-    display: "flex",
-    height: `calc(100vh - ${theme.spacing(2)}px)`,
-    justifyContent: "center",
-    overflow: "hidden",
-    padding: theme.spacing(1),
-    position: "relative",
-  },
-});
+type LandingPageProps = ComponentWithClasses;
+interface LandingPageState {
+  openSignIn: boolean;
+}
 
-class LandingPage extends Component {
-  constructor(props) {
+const styles = (theme: Theme) =>
+  createStyles({
+    root: {
+      alignItems: "center",
+      display: "flex",
+      height: `calc(100vh - ${theme.spacing(2)}px)`,
+      justifyContent: "center",
+      overflow: "hidden",
+      padding: theme.spacing(1),
+      position: "relative",
+    },
+  });
+
+class LandingPage extends Component<LandingPageProps, LandingPageState> {
+  constructor(props: LandingPageProps) {
     super(props);
 
     this.state = {
@@ -29,15 +35,15 @@ class LandingPage extends Component {
     this.handleOpenSignIn = this.handleOpenSignIn.bind(this);
   }
 
-  handleCloseSignIn() {
+  private handleCloseSignIn() {
     this.setState({ openSignIn: false });
   }
 
-  handleOpenSignIn() {
+  private handleOpenSignIn() {
     this.setState({ openSignIn: true });
   }
 
-  render() {
+  public render() {
     const { openSignIn } = this.state;
     const { classes } = this.props;
 
@@ -49,9 +55,5 @@ class LandingPage extends Component {
     );
   }
 }
-
-LandingPage.propTypes = {
-  classes: PropTypes.object,
-};
 
 export default withStyles(styles)(LandingPage);
