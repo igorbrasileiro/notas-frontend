@@ -1,26 +1,39 @@
-import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
+import { withRouter, RouteComponentProps } from "react-router-dom";
 import React, { Component, Fragment } from "react";
-import { Menu, MenuItem, withStyles } from "@material-ui/core";
+import {
+  Menu,
+  MenuItem,
+  withStyles,
+  createStyles,
+  PopoverProps,
+} from "@material-ui/core";
 
 import { clearStore } from "../../actions";
+import { ComponentWithClasses } from "../utils/classes";
 
-const styles = {
+interface UserMenuProps extends ComponentWithClasses, RouteComponentProps {
+  anchorEl: PopoverProps["anchorEl"];
+  menuId: string;
+  onClose: () => void;
+  resetStore: () => void;
+}
+
+const styles = createStyles({
   userMenu: {
     minWidth: 200,
   },
-};
+});
 
-class UserMenu extends Component {
-  constructor(props) {
+class UserMenu extends Component<UserMenuProps> {
+  constructor(props: UserMenuProps) {
     super(props);
 
     this.handleLogout = this.handleLogout.bind(this);
     this.goToRoute = this.goToRoute.bind(this);
   }
 
-  handleLogout() {
+  private handleLogout() {
     const { resetStore, onClose } = this.props;
     localStorage.removeItem("token");
     resetStore();
@@ -28,12 +41,12 @@ class UserMenu extends Component {
     this.goToRoute("/landing");
   }
 
-  goToRoute(path = "/") {
+  private goToRoute(path = "/") {
     this.props.history.push(path);
     this.props.onClose();
   }
 
-  render() {
+  public render() {
     const { anchorEl, classes, menuId, onClose } = this.props;
     const open = Boolean(anchorEl);
 
@@ -59,18 +72,7 @@ class UserMenu extends Component {
   }
 }
 
-UserMenu.propTypes = {
-  anchorEl: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
-  classes: PropTypes.object.isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
-  menuId: PropTypes.string.isRequired,
-  onClose: PropTypes.func.isRequired,
-  resetStore: PropTypes.func.isRequired,
-};
-
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: any) {
   return {
     resetStore: () => clearStore(dispatch),
   };

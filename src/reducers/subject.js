@@ -10,6 +10,7 @@ const DEFAULT_STATE = {
   byId: {},
 };
 
+// eslint-disable-next-line default-param-last
 function subject(state = DEFAULT_STATE, action) {
   switch (action.type) {
     case SAVE_SUBJECT:

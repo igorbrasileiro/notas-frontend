@@ -13,6 +13,7 @@ const DEFAULT_STATE = {
   loggedUserId: NO_LOGGED_USER,
 };
 
+// eslint-disable-next-line default-param-last
 function user(state = DEFAULT_STATE, action) {
   switch (action.type) {
     case SAVE_USER:

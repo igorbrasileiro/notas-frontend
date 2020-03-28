@@ -1,4 +1,6 @@
+/* eslint-disable  */
 import axios from "axios";
+
 import domain from "../config/domain";
 
 const endpoint = process.env.NODE_ENV

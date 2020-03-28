@@ -1,15 +1,22 @@
-import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import React, { Component } from "react";
-import { withStyles } from "@material-ui/core";
+import { withStyles, createStyles } from "@material-ui/core";
 
 import ApplicationBar from "./ApplicationBar";
 import UserInfo from "../UserInfo";
-import { NO_LOGGED_USER } from "../../reducers/user";
 import { fetchLoggedUser } from "../../actions/user";
 import { fetchUserSubjects } from "../../actions/subject";
+import { NO_LOGGED_USER } from "../../reducers/user";
+import { UserReduceState } from "../../reducers/userInterfaces";
+import { ComponentWithClasses } from "../utils/classes";
 
-const styles = {
+interface HomeProps extends ComponentWithClasses {
+  role: string;
+  getLoggedUser: () => void;
+  getUserSubjects: () => void;
+}
+
+const styles = createStyles({
   main: {
     alignItens: "center",
     backgroundColor: "inherit",
@@ -26,16 +33,16 @@ const styles = {
     flexDirection: "column",
     width: "100%",
   },
-};
+});
 
-class Home extends Component {
-  componentDidMount() {
+class Home extends Component<HomeProps> {
+  public componentDidMount() {
     const { getLoggedUser, getUserSubjects } = this.props;
     getLoggedUser();
     getUserSubjects();
   }
 
-  render() {
+  public render() {
     const { classes, role } = this.props;
 
     return (
@@ -47,14 +54,7 @@ class Home extends Component {
   }
 }
 
-Home.propTypes = {
-  classes: PropTypes.object.isRequired,
-  getLoggedUser: PropTypes.func.isRequired,
-  getUserSubjects: PropTypes.func.isRequired,
-  role: PropTypes.string.isRequired,
-};
-
-function mapStateToProps({ user }) {
+function mapStateToProps({ user }: { user: UserReduceState }) {
   const role =
     user.loggedUserId !== NO_LOGGED_USER
       ? user.byId[user.loggedUserId].role
@@ -64,7 +64,7 @@ function mapStateToProps({ user }) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: any) {
   return {
     getLoggedUser: () => dispatch(fetchLoggedUser()),
     getUserSubjects: () => dispatch(fetchUserSubjects()), // CHANGE TO USER
