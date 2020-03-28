@@ -15,7 +15,7 @@ const AsyncHome = Loadable({
   loading: LoadingPage,
 });
 
-const routes = () => (
+const routes: React.FC = () => (
   <Switch>
     <Route path="/landing" component={AsyncLandingPage} />
     <AuthRoute component={AsyncHome} />
