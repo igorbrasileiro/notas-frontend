@@ -1,13 +1,13 @@
-import React from "react";
+import React, { FC } from "react";
 
 import SubjectList from "./SubjectList";
 import CreateSubjectCard from "./CreateSubjectCard";
 
-const StudentCards = () => (
-  <div>
+const StudentCards: FC = () => (
+  <>
     <CreateSubjectCard />
     <SubjectList />
-  </div>
+  </>
 );
 
 export default StudentCards;
