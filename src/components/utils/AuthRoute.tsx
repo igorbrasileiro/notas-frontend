@@ -1,7 +1,11 @@
-import React from "react";
+import React, { ElementType } from "react";
 import { Route, Redirect } from "react-router-dom";
 
-const AuthRoute = ({ component: Component, ...rest }) => (
+interface AuthRouteProps {
+  component: ElementType;
+}
+
+const AuthRoute = ({ component: Component, ...rest }: AuthRouteProps) => (
   <Route
     {...rest}
     render={(props) =>
