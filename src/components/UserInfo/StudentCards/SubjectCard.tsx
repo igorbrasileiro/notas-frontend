@@ -18,12 +18,12 @@ import {
 import { v5 as uuidv5 } from "uuid";
 
 import { deleteStudentSubject } from "../../../actions/subject";
-import { SubjectConfig } from "../../../reducers/subjectInterfaces";
+import { StudentSubjectConfig } from "../../../reducers/subjectInterfaces";
 
 interface SubjectContentProps {
   expanded: boolean;
   onHandleRemove: () => void;
-  subject: SubjectConfig;
+  subject: StudentSubjectConfig;
 }
 
 const useSubjectContentStyle = makeStyles((theme: Theme) => ({
@@ -149,7 +149,7 @@ const ExpandButtonCard = ({ onClick, expanded }: ExpandButtonCardProps) => {
 };
 
 interface SubjectCardProps {
-  subject: SubjectConfig;
+  subject: StudentSubjectConfig;
 }
 
 const useStyles = makeStyles((theme: Theme) => ({

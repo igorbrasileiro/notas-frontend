@@ -4,19 +4,22 @@ import { useSelector } from "react-redux";
 import SubjectCard from "./SubjectCard";
 import {
   SubjectReduceState,
-  SubjectConfig,
+  StudentSubjectConfig,
   id,
 } from "../../../reducers/subjectInterfaces";
 
 const SubjectList: FC = () => {
   const { byId, allIds } = useSelector(
-    ({ subject }: { subject: SubjectReduceState }): SubjectReduceState =>
-      subject
+    ({
+      subject,
+    }: {
+      subject: SubjectReduceState<StudentSubjectConfig>;
+    }): SubjectReduceState<StudentSubjectConfig> => subject
   );
   return (
     <>
       {allIds.map((subjectId: id) => {
-        const subject: SubjectConfig = byId[subjectId];
+        const subject: StudentSubjectConfig = byId[subjectId];
         return <SubjectCard key={subject._id} subject={subject} />;
       })}
     </>

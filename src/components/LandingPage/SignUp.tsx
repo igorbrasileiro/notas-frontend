@@ -203,7 +203,7 @@ const Signup: FC<Props> = ({
             className={classes.signupSubmitButton}
             color="primary"
             disabled={isSubmitting}
-            onClick={handleSubmit}
+            onClick={() => handleSubmit()}
           >
             Registrar
           </FadeInButton>

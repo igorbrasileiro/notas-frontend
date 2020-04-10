@@ -1,4 +1,4 @@
-import React, { ReactChild, FC, PropsWithChildren, ElementType } from "react";
+import React, { PropsWithChildren } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Button,
@@ -8,10 +8,10 @@ import {
   GrowProps,
   TypographyTypeMap,
   WithWidth,
-  WithWidthProps,
+  ButtonProps,
 } from "@material-ui/core";
 
-const FadeInButtonStyles = (delay: number) => {
+const FadeInButtonStyles = (delay = 125) => {
   return makeStyles({
     root: {
       animation: `$fadeIn ${delay * 2}ms`,
@@ -31,10 +31,10 @@ const FadeInButtonStyles = (delay: number) => {
 };
 
 interface FadeInButtonProps {
-  delay: number;
+  delay?: number;
 }
 
-export const FadeInButton = (props: FadeInButtonProps) => {
+export const FadeInButton = (props: FadeInButtonProps & ButtonProps) => {
   const classes = FadeInButtonStyles(props.delay);
   return <Button className={classes.root} {...props} />;
 };
