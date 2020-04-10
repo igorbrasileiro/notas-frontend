@@ -1,7 +1,9 @@
+import { Dispatch } from "react";
+
 import { SAVE_USER, SET_LOGGED_USER } from "./actionTypes";
 import { get } from "../utils/HTTPClient";
 
-export const fetchLoggedUser = () => (dispatch) =>
+export const fetchLoggedUser = () => (dispatch: Dispatch<object>) =>
   get("user", localStorage.getItem("token")).then((res) => {
     dispatch({
       type: SAVE_USER,

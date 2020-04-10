@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface RemoveSubjectButtonProps {
-  onHandleRemove: () => (id: string) => void;
+  onHandleRemove: () => void;
 }
 
 const RemoveSubjectButton = ({ onHandleRemove }: RemoveSubjectButtonProps) => {

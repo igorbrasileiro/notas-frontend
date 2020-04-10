@@ -22,7 +22,7 @@ export interface TeacherSubjectConfig extends Id {
   spreadsheetId: string;
 }
 
-type SubjectConfig = TeacherSubjectConfig | StudentSubjectConfig;
+export type SubjectConfig = TeacherSubjectConfig | StudentSubjectConfig;
 
 interface SubjectById<T = SubjectConfig> {
   [key: string]: T;
