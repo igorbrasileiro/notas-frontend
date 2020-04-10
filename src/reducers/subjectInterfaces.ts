@@ -9,7 +9,7 @@ interface Subject extends Id {
   name: string;
 }
 
-export interface SubjectConfig extends Id {
+export interface StudentSubjectConfig extends Id {
   gradeColumns: string;
   studentIdentification: string;
   studentIdentificationColumn: string;
@@ -17,11 +17,18 @@ export interface SubjectConfig extends Id {
   grades?: string[];
 }
 
-interface SubjectById {
-  [key: string]: SubjectConfig;
+export interface TeacherSubjectConfig extends Id {
+  name: string;
+  spreadsheetId: string;
 }
 
-export interface SubjectReduceState {
+type SubjectConfig = TeacherSubjectConfig | StudentSubjectConfig;
+
+interface SubjectById<T = SubjectConfig> {
+  [key: string]: T;
+}
+
+export interface SubjectReduceState<T> {
   allIds: string[];
-  byId: SubjectById;
+  byId: SubjectById<T>;
 }
