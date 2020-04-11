@@ -1,0 +1,8 @@
+mutation createUser($user: CreateUserInput) {
+  createUser(user: $user) {
+    _id
+    name
+    email
+    role
+  }
+}

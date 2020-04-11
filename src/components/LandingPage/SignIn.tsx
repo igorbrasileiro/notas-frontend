@@ -25,7 +25,7 @@ import {
 import { useLazyQuery } from "@apollo/react-hooks";
 import { loader } from "graphql.macro";
 
-const LOGIN = loader("../../graphql/login.graphql");
+const LOGIN = loader("../../graphql/user/login.graphql");
 
 const Transition = (props: GrowProps) => {
   return <Grow in {...props} />;

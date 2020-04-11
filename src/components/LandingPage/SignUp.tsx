@@ -1,7 +1,7 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import * as Yup from "yup";
-import { Form, withFormik, FormikProps } from "formik";
-import { withRouter, RouteComponentProps } from "react-router-dom";
+import { useFormik } from "formik";
+import { useHistory } from "react-router-dom";
 import {
   Zoom,
   Input,
@@ -15,9 +15,13 @@ import {
   makeStyles,
   Theme,
 } from "@material-ui/core";
+import { useMutation, useLazyQuery } from "@apollo/react-hooks";
+import { loader } from "graphql.macro";
 
 import { FadeInButton } from "../utils/SharedComponents";
-import { post } from "../../utils/HTTPClient";
+
+const CREATE_USER = loader("../../graphql/user/createUser.graphql");
+const LOGIN = loader("../../graphql/user/login.graphql");
 
 const DEFAULT_ANIMATION_TIMING = 700;
 
@@ -105,32 +109,73 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-interface SignUpExternalProps extends RouteComponentProps {
+interface SignUpExternalProps {
   onHandleSignIn: () => void;
 }
 
-interface FormikValues {
-  email: string;
-  name: string;
-  password: string;
-  role: string;
-}
+type Props = SignUpExternalProps;
 
-type Props = SignUpExternalProps & FormikProps<FormikValues>;
-
-const Signup: FC<Props> = ({
-  handleChange,
-  onHandleSignIn,
-  values,
-  errors,
-  touched,
-  isSubmitting,
-  handleSubmit,
-}: Props) => {
+const Signup: FC<Props> = ({ onHandleSignIn }: Props) => {
   const classes = useStyles();
+  const history = useHistory();
+  const [createUser, { data: createdUser, loading }] = useMutation(CREATE_USER);
+  const [login, { data: logged }] = useLazyQuery(LOGIN);
+  const { values, errors, touched, handleChange, handleReset } = useFormik({
+    initialValues: {
+      name: "",
+      email: "",
+      password: "",
+      role: "",
+    },
+    onSubmit: () => {},
+    validationSchema: Yup.object().shape({
+      email: Yup.string()
+        .trim()
+        .email("Você deve passar um email válido.")
+        .required("Email obrigatório."),
+      name: Yup.string()
+        .trim()
+        .lowercase()
+        .min(6, "Nome deve ter pelo menos 6 caracteres.")
+        .max(50, "Nome não pode ter mais de 50 caracteres.")
+        .required("Nome obrigatório"),
+      password: Yup.string()
+        .min(6, "A senha deve ter pelo menos 6 caracteres.")
+        .max(30, "Senha não pode ter mais que 30 caracteres.")
+        .required("Senha obrigatória."),
+      role: Yup.string()
+        .oneOf(["STUDENT", "TEACHER"])
+        .required("Tipo obrigatório."),
+    }),
+  });
+
+  useEffect(() => {
+    if (!createdUser?.createUser) {
+      return;
+    }
+
+    login({
+      variables: {
+        input: {
+          email: createdUser.createUser.email,
+          password: values.password,
+        },
+      },
+    });
+  }, [createdUser, login, values]);
+
+  useEffect(() => {
+    if (!logged?.login) {
+      return;
+    }
+    localStorage.setItem("token", logged.login);
+    history.push("/");
+    handleReset(null);
+  }, [handleReset, history, logged]);
+
   return (
     <Paper className={classes.signupContainer}>
-      <Form className={classes.form}>
+      <form className={classes.form}>
         <FormControl
           className={classes.formControl}
           error={touched.name && errors.name !== undefined}
@@ -202,12 +247,12 @@ const Signup: FC<Props> = ({
           <FadeInButton
             className={classes.signupSubmitButton}
             color="primary"
-            disabled={isSubmitting}
-            onClick={() => handleSubmit()}
+            disabled={loading}
+            onClick={() => createUser({ variables: { user: values } })}
           >
             Registrar
           </FadeInButton>
-          {isSubmitting && (
+          {loading && (
             <CircularProgress
               size={24}
               className={classes.signupButtonProgress}
@@ -221,61 +266,9 @@ const Signup: FC<Props> = ({
         >
           Login
         </FadeInButton>
-      </Form>
+      </form>
     </Paper>
   );
 };
 
-export default withRouter(
-  withFormik<SignUpExternalProps, FormikValues>({
-    mapPropsToValues() {
-      return {
-        name: "",
-        email: "",
-        password: "",
-        role: "",
-      };
-    },
-    validationSchema: () =>
-      Yup.object().shape({
-        email: Yup.string()
-          .trim()
-          .email("Você deve passar um email válido.")
-          .required("Email obrigatório."),
-        name: Yup.string()
-          .trim()
-          .lowercase()
-          .min(6, "Nome deve ter pelo menos 6 caracteres.")
-          .max(50, "Nome não pode ter mais de 50 caracteres.")
-          .required("Nome obrigatório"),
-        password: Yup.string()
-          .min(6, "A senha deve ter pelo menos 6 caracteres.")
-          .max(30, "Senha não pode ter mais que 30 caracteres.")
-          .required("Senha obrigatória."),
-        role: Yup.string()
-          .oneOf(["STUDENT", "TEACHER"])
-          .required("Tipo obrigatório."),
-      }),
-    handleSubmit(values, { setSubmitting, props, resetForm }) {
-      post("user", values)
-        .then(() => {
-          setSubmitting(false);
-          resetForm({
-            values: {
-              name: "",
-              email: "",
-              password: "",
-              role: "",
-            },
-          });
-          post("auth", { email: values.email, password: values.password })
-            .then((res) => {
-              localStorage.setItem("token", res.data.token);
-              props.history.push("/");
-            })
-            .catch();
-        })
-        .catch(() => setSubmitting(false));
-    },
-  })(Signup)
-);
+export default Signup;
