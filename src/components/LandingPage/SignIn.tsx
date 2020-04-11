@@ -1,8 +1,8 @@
-import React, { PropsWithChildren, ReactNode } from "react";
+import React, { PropsWithChildren, ReactNode, useEffect, FC } from "react";
 import * as Yup from "yup";
 import classNames from "classnames";
-import { Form, withFormik, FormikProps, FormikBag, FormikErrors } from "formik";
-import { withRouter, RouteComponentProps } from "react-router-dom";
+import { useFormik } from "formik";
+import { useHistory } from "react-router-dom";
 import {
   Grow,
   Zoom,
@@ -22,35 +22,21 @@ import {
   GrowProps,
   WithMobileDialog,
 } from "@material-ui/core";
+import { useLazyQuery } from "@apollo/react-hooks";
+import { loader } from "graphql.macro";
 
-import { post } from "../../utils/HTTPClient";
+const LOGIN = loader("../../graphql/login.graphql");
 
 const Transition = (props: GrowProps) => {
   return <Grow in {...props} />;
 };
 
-interface SignInExternalProps extends RouteComponentProps {
+interface SignInExternalProps extends WithMobileDialog {
   open: boolean;
   onClose: () => void;
 }
 
-interface FormikValues {
-  email: string;
-  password: string;
-}
-
-interface CustomFormikError extends FormikErrors<FormikValues> {
-  requestError?: string;
-}
-
-type SignInInterProps = WithMobileDialog & {
-  errors: CustomFormikError;
-};
-
-type Props = SignInExternalProps &
-  FormikProps<FormikValues> &
-  Partial<SignInInterProps> &
-  PropsWithChildren<ReactNode>;
+type Props = SignInExternalProps & PropsWithChildren<ReactNode>;
 
 const useStyles = makeStyles((theme: Theme) => ({
   form: {
@@ -102,20 +88,49 @@ function getErrorMessage(errorStatus: string) {
   }
 }
 
-const Signin: React.FC<Props> = ({
-  errors,
-  fullScreen,
-  handleChange,
-  handleReset,
-  handleSubmit,
-  isSubmitting,
-  values,
-  open,
-  onClose,
-  touched,
-  width,
-}: Props) => {
+const Signin: FC<Props> = ({ fullScreen, open, onClose, width }: Props) => {
   const classes = useStyles();
+  const [login, { data, loading, error }] = useLazyQuery(LOGIN);
+  const history = useHistory();
+
+  const {
+    handleChange,
+    handleReset,
+    handleSubmit,
+    values,
+    errors,
+    touched,
+  } = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    onSubmit: (formValues) => {
+      login({ variables: { input: formValues } });
+    },
+    validationSchema: Yup.object().shape({
+      email: Yup.string()
+        .email("Email inválido.")
+        .required("Email obrigatório."),
+      password: Yup.string()
+        .min(6, "A senha deve ter pelo menos 6 caracteres.")
+        .max(30, "Senha não pode ter mais que 30 caracteres.")
+        .required("Senha obrigatória."),
+    }),
+  });
+
+  useEffect(() => {
+    const handleLogin = () => {
+      if (!data?.login) {
+        return;
+      }
+      localStorage.setItem("token", data.login);
+      history.push("/");
+    };
+
+    handleLogin();
+  }, [data, error, history]);
+
   return (
     <Dialog
       fullScreen={fullScreen}
@@ -135,7 +150,7 @@ const Signin: React.FC<Props> = ({
     >
       <DialogTitle>Login</DialogTitle>
       <DialogContent>
-        <Form className={classes.form}>
+        <form className={classes.form}>
           <FormControl
             className={classes.formControl}
             error={touched.email && errors.email !== undefined}
@@ -175,18 +190,18 @@ const Signin: React.FC<Props> = ({
             )}
           </FormControl>
           <DialogActions>
-            <Button color="primary" disabled={isSubmitting} onClick={onClose}>
+            <Button color="primary" disabled={loading} onClick={onClose}>
               Cancelar
             </Button>
             <div className={classes.signinButtonSubmitWrapper}>
               <Button
                 color="primary"
-                disabled={isSubmitting}
+                disabled={loading}
                 onClick={() => handleSubmit()}
               >
                 Login
               </Button>
-              {isSubmitting && (
+              {loading && (
                 <CircularProgress
                   size={24}
                   className={classes.singinButtonProgress}
@@ -194,14 +209,14 @@ const Signin: React.FC<Props> = ({
               )}
             </div>
           </DialogActions>
-          {errors.requestError !== undefined && (
+          {error?.message && (
             <Zoom in>
               <FormHelperText error>
-                {getErrorMessage(errors.requestError)}
+                {getErrorMessage(error.message)}
               </FormHelperText>
             </Zoom>
           )}
-        </Form>
+        </form>
       </DialogContent>
     </Dialog>
   );
@@ -213,44 +228,6 @@ Signin.defaultProps = {
 
 const SignInFinalComponent = withMobileDialog({
   breakpoint: "xs",
-})(
-  withRouter(
-    withFormik<SignInExternalProps, FormikValues>({
-      mapPropsToValues() {
-        return {
-          email: "",
-          password: "",
-        };
-      },
-      validationSchema: Yup.object().shape({
-        email: Yup.string()
-          .email("Email inválido.")
-          .required("Email obrigatório."),
-        password: Yup.string()
-          .min(6, "A senha deve ter pelo menos 6 caracteres.")
-          .max(30, "Senha não pode ter mais que 30 caracteres.")
-          .required("Senha obrigatória."),
-      }),
-      handleSubmit(
-        values,
-        { setSubmitting, props, resetForm }: FormikBag<SignInExternalProps, {}>
-      ) {
-        post("auth", values)
-          .then((res) => {
-            setSubmitting(false);
-            localStorage.setItem("token", res.data.token);
-            resetForm({
-              email: "",
-              password: "",
-            });
-            props.onClose();
-            props.history.push("/");
-          })
-          .catch(() => setSubmitting(false));
-      },
-      enableReinitialize: true,
-    })(Signin)
-  )
-);
+})(Signin);
 
 export default SignInFinalComponent;

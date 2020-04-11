@@ -228,10 +228,12 @@ export default connect(
 
         setSubmitting(false);
         resetForm({
-          gradeColumns: "",
-          studentIdentification: "",
-          studentIdentificationColumn: "",
-          subject: "",
+          values: {
+            gradeColumns: "",
+            studentIdentification: "",
+            studentIdentificationColumn: "",
+            subject: "",
+          },
         });
       });
     },

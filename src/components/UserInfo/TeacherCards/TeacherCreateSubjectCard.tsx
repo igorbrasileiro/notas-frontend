@@ -202,8 +202,10 @@ export default connect(
           }
           setSubmitting(false);
           resetForm({
-            name: "",
-            spreadsheetId: "",
+            values: {
+              name: "",
+              spreadsheetId: "",
+            },
           });
         })
         .catch(() => {

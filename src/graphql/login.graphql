@@ -1,0 +1,3 @@
+query token($input: Login) {
+   login(input: $input)
+}

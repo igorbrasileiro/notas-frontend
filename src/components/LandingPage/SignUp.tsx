@@ -194,8 +194,8 @@ const Signup: FC<Props> = ({
             }}
           >
             <MenuItem value="">Selecione seu tipo</MenuItem>
-            <MenuItem value="student">Aluno</MenuItem>
-            <MenuItem value="teacher">Professor</MenuItem>
+            <MenuItem value="STUDENT">Aluno</MenuItem>
+            <MenuItem value="TEACHER">Professor</MenuItem>
           </Select>
         </FormControl>
         <div className={classes.signupButtonWrapper}>
@@ -253,7 +253,7 @@ export default withRouter(
           .max(30, "Senha não pode ter mais que 30 caracteres.")
           .required("Senha obrigatória."),
         role: Yup.string()
-          .oneOf(["student", "teacher"])
+          .oneOf(["STUDENT", "TEACHER"])
           .required("Tipo obrigatório."),
       }),
     handleSubmit(values, { setSubmitting, props, resetForm }) {
@@ -261,10 +261,12 @@ export default withRouter(
         .then(() => {
           setSubmitting(false);
           resetForm({
-            name: "",
-            email: "",
-            password: "",
-            role: "",
+            values: {
+              name: "",
+              email: "",
+              password: "",
+              role: "",
+            },
           });
           post("auth", { email: values.email, password: values.password })
             .then((res) => {
