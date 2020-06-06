@@ -15,7 +15,6 @@ import {
   makeStyles,
   Theme,
 } from "@material-ui/core";
-import { v5 as uuidv5 } from "uuid";
 
 import { deleteStudentSubject } from "../../../actions/subject";
 import { StudentSubjectConfig } from "../../../reducers/subjectInterfaces";
@@ -87,17 +86,19 @@ const SubjectContent: FC<SubjectContentProps> = ({
           />
         </div>
         <div className={classes.gradesGrid}>
-          {subject.grades?.map((grade: string) => (
-            <TextField
-              key={uuidv5(grade, "MY_CONSTANT")}
-              label="Nota"
-              value={grade}
-              margin="normal"
-              variant="outlined"
-              className={classes.grade}
-              fullWidth
-            />
-          ))}
+          {subject.grades?.map((grade: string, index: number) =>
+            grade ? (
+              <TextField
+                key={`${grade}.${index}`}
+                label="Nota"
+                value={grade}
+                margin="normal"
+                variant="outlined"
+                className={classes.grade}
+                fullWidth
+              />
+            ) : null
+          )}
         </div>
       </CardContent>
       <CardActions>

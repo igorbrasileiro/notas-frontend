@@ -1,0 +1,14 @@
+query StudentsSubjects {
+  studentSubjects {
+    _id
+    subject {
+      name
+      createdAt
+    	spreadsheetId  
+    }
+    studentIdentification
+    gradeColumns
+    studentIdentificationColumn
+    grades
+  }
+}

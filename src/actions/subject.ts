@@ -1,29 +1,7 @@
 import { Dispatch } from "react";
 
 import { SAVE_SUBJECT, REMOVE_SUBJECT } from "./actionTypes";
-import { get, post, del } from "../utils/HTTPClient";
-import { SubjectConfig } from "../reducers/subjectInterfaces";
-
-const saveSubjects = (
-  subjects: SubjectConfig[],
-  dispatch: Dispatch<object>
-) => {
-  subjects.forEach((subject) => {
-    dispatch({
-      type: SAVE_SUBJECT,
-      subject,
-    });
-  });
-};
-
-export const fetchUserSubjects = () => (dispatch: Dispatch<object>) =>
-  get("subject/", localStorage.getItem("token")).then((res) => {
-    if (res.data && res.data instanceof Array) {
-      saveSubjects(res.data, dispatch);
-    }
-
-    return res;
-  });
+import { post, del } from "../utils/HTTPClient";
 
 export const createStudentSubject = (input: object) => (
   dispatch: Dispatch<object>

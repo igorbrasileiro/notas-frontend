@@ -1,7 +1,7 @@
 import React from "react";
 import { loader } from "graphql.macro";
 import { useQuery } from "@apollo/react-hooks";
-import { makeStyles, Theme } from "@material-ui/core";
+import { makeStyles, Theme, CircularProgress } from "@material-ui/core";
 
 import TeacherCards from "./TeacherCards";
 import StudentCards from "./StudentCards";
@@ -21,14 +21,20 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 const UserInfo = () => {
-  const { data } = useQuery(USER_PROFILE);
+  const { data, loading } = useQuery(USER_PROFILE);
 
   const classes = useStyles();
   const isStudent = data?.userProfile?.role === "STUDENT";
 
   return (
     <div className={classes.root}>
-      {isStudent ? <StudentCards /> : <TeacherCards />}
+      {loading ? (
+        <CircularProgress />
+      ) : isStudent ? (
+        <StudentCards />
+      ) : (
+        <TeacherCards />
+      )}
     </div>
   );
 };

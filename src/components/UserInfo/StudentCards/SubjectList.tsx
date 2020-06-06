@@ -1,28 +1,25 @@
 import React, { FC } from "react";
-import { useSelector } from "react-redux";
+import { loader } from "graphql.macro";
+import { useQuery } from "@apollo/react-hooks";
+import { CircularProgress } from "@material-ui/core";
 
 import SubjectCard from "./SubjectCard";
-import {
-  SubjectReduceState,
-  StudentSubjectConfig,
-  id,
-} from "../../../reducers/subjectInterfaces";
+import { StudentSubjectConfig } from "../../../reducers/subjectInterfaces";
+
+const STUDENT_SUBJECTS = loader(
+  "../../../graphql/subjects/StudentSubjects.graphql"
+);
 
 const SubjectList: FC = () => {
-  const { byId, allIds } = useSelector(
-    ({
-      subject,
-    }: {
-      subject: SubjectReduceState<StudentSubjectConfig>;
-    }): SubjectReduceState<StudentSubjectConfig> => subject
-  );
-  return (
-    <>
-      {allIds.map((subjectId: id) => {
-        const subject: StudentSubjectConfig = byId[subjectId];
-        return <SubjectCard key={subject._id} subject={subject} />;
-      })}
-    </>
+  const { data, loading } = useQuery(STUDENT_SUBJECTS);
+  const subjects = data?.studentSubjects;
+
+  return loading ? (
+    <CircularProgress />
+  ) : (
+    subjects.map((subject: StudentSubjectConfig) => {
+      return <SubjectCard key={subject._id} subject={subject} />;
+    })
   );
 };
 
