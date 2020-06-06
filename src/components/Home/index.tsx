@@ -15,10 +15,7 @@ const styles = createStyles({
     width: "100%",
   },
   wrapper: {
-    alignItens: "center",
-    backgroundColor: "inherit",
     display: "flex",
-    flex: "1 1 auto",
     flexDirection: "column",
     width: "100%",
   },
