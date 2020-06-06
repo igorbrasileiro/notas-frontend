@@ -26,6 +26,10 @@ const UserInfo = () => {
   const classes = useStyles();
   const isStudent = data?.userProfile?.role === "STUDENT";
 
+  if (!loading && data?.userProfile) {
+    document.title = `Notas ${data.userProfile.name}`;
+  }
+
   return (
     <div className={classes.root}>
       {loading ? (
