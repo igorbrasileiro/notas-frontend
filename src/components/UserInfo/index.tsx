@@ -1,10 +1,12 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { loader } from "graphql.macro";
+import { useQuery } from "@apollo/react-hooks";
 import { makeStyles, Theme } from "@material-ui/core";
 
 import TeacherCards from "./TeacherCards";
 import StudentCards from "./StudentCards";
-import { UserReduceState } from "../../reducers/userInterfaces";
+
+const USER_PROFILE = loader("../../graphql/user/UserProfile.graphql");
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -19,15 +21,14 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 const UserInfo = () => {
-  const { byId, loggedUserId } = useSelector(
-    ({ user }: { user: UserReduceState }): UserReduceState => user
-  );
+  const { data } = useQuery(USER_PROFILE);
+
   const classes = useStyles();
-  const role = byId[loggedUserId]?.role;
+  const isStudent = data?.userProfile?.role === "STUDENT";
 
   return (
     <div className={classes.root}>
-      {role === "student" ? <StudentCards /> : <TeacherCards />}
+      {isStudent ? <StudentCards /> : <TeacherCards />}
     </div>
   );
 };
